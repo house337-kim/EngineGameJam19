@@ -1,0 +1,37 @@
+{
+  "defaultSeverity": "error",
+  "extends": ["tslint:recommended"],
+  "jsRules": {},
+  "rules": {
+    "align": false,
+    "array-type": [false, "generic"],
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "curly": false,
+    "interface-name": [true, "never-prefix"],
+    "max-line-length": [false, 160],
+    "no-angle-bracket-type-assertion": false,
+    "no-console": [false],
+    "no-string-literal": false,
+    "one-line": [true, "check-open-brace", "check-whitespace"],
+    "object-literal-sort-keys": [false],
+    "object-literal-key-quotes": [true, "as-needed"],
+    "ordered-imports": false,
+    "no-shadowed-variable": false,
+    "quotemark": [true, "single", "avoid-escape"],
+    "space-before-function-paren": [
+      true,
+      {
+        "anonymous": "always",
+        "named": "never",
+        "asyncArrow": "always"
+      }
+    ],
+    "triple-equals": [false],
+    "variable-name": [true, "ban-keywords", "check-format", "allow-pascal-case", "allow-leading-underscore"],
+    "trailing-comma": [false],
+    "no-var-requires": [false],
+    "no-unused-expression": false,
+    "semicolon": [true, "always", "ignore-bound-class-methods"]
+  },
+  "rulesDirectory": []
+}

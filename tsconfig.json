@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "commonjs",
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "typeRoots": ["./typings"]
+  },
+
+  "files": [
+    "src/main.ts",
+    "typings/phaser.d.ts"
+  ]
+}
