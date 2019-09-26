@@ -1,0 +1,14 @@
+-   repo: git://github.com/pre-commit/pre-commit-hooks
+    rev: 46251c9523506b68419aefdf5ff6ff2fbc4506a4
+    hooks:
+        -   id: detect-private-key
+#        -   id: check-added-large-files
+        -   id: check-merge-conflict
+        -   id: end-of-file-fixer
+        -   id: forbid-new-submodules
+        -   id: trailing-whitespace
+        -   id: check-yaml
+-   repo: https://github.com/pre-commit/mirrors-eslint
+    rev: "v6.4.0"
+    hooks:
+        -   id: eslint
