@@ -2,7 +2,8 @@ import {context} from '../constants/constants';
 import { CharacterSprite } from '../objects/CharacterSprite';
 import { addBackgroundImage } from '../utils/utils';
 import { hasClickedInMovementArea } from '../utils/movement-utils';
-import {PLAYER_MOVEMENT_AREA, WORLD_CENTER_X} from '../constants/positions';
+import {PLAYER_MOVEMENT_AREA, WORLD_CENTER_X, WORLD_HEIGHT} from '../constants/positions';
+import { LoadingScene } from './load-scene';
 
 export class SceneOne extends Phaser.Scene {
   public player!: Phaser.GameObjects.Container;
@@ -64,7 +65,21 @@ export class SceneOne extends Phaser.Scene {
         alpha: 0.8
       }
     });
-    loadingBox.fillRect(0, PLAYER_MOVEMENT_AREA, this.game.renderer.width, 1);
+
+    // loadingBox.fillRect(0, PLAYER_MOVEMENT_AREA, this.game.renderer.width, 1);
+
+    loadingBox.lineStyle(2, 0x000000, 1);
+
+    loadingBox.lineBetween(300, PLAYER_MOVEMENT_AREA, this.game.renderer.width - 300, PLAYER_MOVEMENT_AREA);
+
+    loadingBox.lineBetween(100, 0, 100, this.game.renderer.height);
+    loadingBox.lineBetween(300, 0, 300, PLAYER_MOVEMENT_AREA);
+
+    loadingBox.lineBetween(this.game.renderer.width - 100, 0, this.game.renderer.width - 100, this.game.renderer.height);
+    loadingBox.lineBetween(this.game.renderer.width - 300, 0, this.game.renderer.width - 300, PLAYER_MOVEMENT_AREA);
+
+    loadingBox.lineBetween(100, this.game.renderer.height, 300, PLAYER_MOVEMENT_AREA);
+    loadingBox.lineBetween(this.game.renderer.width - 100, this.game.renderer.height, this.game.renderer.width - 300, PLAYER_MOVEMENT_AREA);
 
     this.addAnimations();
   }
@@ -79,15 +94,42 @@ export class SceneOne extends Phaser.Scene {
       this.hero.play('walk_right', true);
       if (this.checkpoint && this.hero.x > this.checkpoint.x) {
         this.hero.setVelocityX(0);
-        this.hero.play('idle', true);
       }
     } else if (this.hero.body.velocity.x < 0) {
       // moving left
       this.hero.play('walk_left', true);
       if (this.checkpoint && this.hero.x < this.checkpoint.x) {
         this.hero.setVelocityX(0);
-        this.hero.play('idle', true);
       }
+    }
+
+    let perceptionFactor = 0.008;
+
+    if (this.hero.body.velocity.y > 0) {
+      // moving down
+      this.hero.setScale(this.hero.scaleX + perceptionFactor, this.hero.scaleY + perceptionFactor);
+      if (this.checkpoint && this.hero.y > this.checkpoint.y) {
+        this.hero.setVelocityY(0);
+      }
+    } else if (this.hero.body.velocity.y < 0) {
+      // moving up
+      this.hero.setScale(this.hero.scaleX - perceptionFactor, this.hero.scaleY - perceptionFactor);
+      if (this.checkpoint && this.hero.y < this.checkpoint.y) {
+        this.hero.setVelocityY(0);
+      }
+    }
+
+    // check if hero reached a bounding box of checkpoint.xy +- 2 and only then play idle anims. 
+    if(this.checkpoint) {
+      if(this.hero.x >= this.checkpoint.x - 2 && this.hero.x <= this.checkpoint.x + 2) {
+        if(this.hero.y >= this.checkpoint.y - 2 && this.hero.y <= this.checkpoint.y + 2) {
+          this.hero.play('idle', true);
+        }
+      }
+    }
+
+    if (this.checkpoint && this.hero.y == this.checkpoint.y && this.hero.x == this.checkpoint.x) {
+      this.hero.play('idle', true);
     }
 
     this.input.on('pointerup', (pointer: Phaser.Input.Pointer) => {
@@ -108,6 +150,20 @@ export class SceneOne extends Phaser.Scene {
             // check if hero has arrived to checkpoint
             this.hero.setActive(true);
           }
+
+          if (pointer.worldY > this.hero.y) {
+            // Move down
+            this.hero.setActive(false);
+            this.hero.setVelocityY(128);
+            // check if hero has arrived to checkpoint
+            this.hero.setActive(true);
+          } else {
+            // move up
+            this.hero.setActive(false);
+            this.hero.setVelocityY(-128);
+            // check if hero has arrived to checkpoint
+            this.hero.setActive(true);
+          }
         }
       }
     });
@@ -116,6 +172,6 @@ export class SceneOne extends Phaser.Scene {
   public create() {
     console.log('Scene One - Scene');
 
-    this.hero = new CharacterSprite(this, WORLD_CENTER_X , PLAYER_MOVEMENT_AREA * 1.10, context.sprites.hero, 4);
+    this.hero = new CharacterSprite(this, WORLD_CENTER_X , PLAYER_MOVEMENT_AREA * 1.10, "hero", 4);
   }
 }

@@ -16,6 +16,6 @@ export const context = {
     menu_selector: 'menu_selector.png'
   },
   sprites: {
-    hero: 'hero.png'
+    hero: 'hero.png',
   }
 };
