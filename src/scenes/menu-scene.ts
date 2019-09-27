@@ -1,21 +1,21 @@
-import {context} from '../constants/constants';
-import {addBackgroundImage} from '../utils/utils';
+import {objects} from '../constants/objects';
+import {addBackgroundImage} from '../helpers/utils';
 import {WORLD_CENTER_X, WORLD_CENTER_Y} from '../constants/positions';
 
 export class MenuScene extends Phaser.Scene {
   constructor() {
     super({
-      key: context.scenes.menu
+      key: objects.scenes.menu
     });
   }
 
   public preload() {
     // Add using z-index
     // Add logo in the middle and 20% Y axis
-    this.add.image(WORLD_CENTER_X, this.game.renderer.height * 0.2, context.images.menu_logo).setDepth(1);
+    this.add.image(WORLD_CENTER_X, this.game.renderer.height * 0.2, objects.images.menu_logo).setDepth(1);
 
     // Add background,center and fit
-    addBackgroundImage(this, context.images.menu_bg);
+    addBackgroundImage(this, objects.images.menu_bg);
   }
 
   public create() {
@@ -23,16 +23,16 @@ export class MenuScene extends Phaser.Scene {
 
     // create the menu scene
     const playButton = this.add
-    .image(WORLD_CENTER_X, WORLD_CENTER_Y, context.buttons.play_button)
+    .image(WORLD_CENTER_X, WORLD_CENTER_Y, objects.buttons.play_button)
     .setDepth(0);
     const infoButton = this.add
-    .image(WORLD_CENTER_X, WORLD_CENTER_Y + 100, context.buttons.info_button)
+    .image(WORLD_CENTER_X, WORLD_CENTER_Y + 100, objects.buttons.info_button)
     .setDepth(0);
     const exitButton = this.add
-    .image(WORLD_CENTER_X, WORLD_CENTER_Y + 200, context.buttons.exit_button)
+    .image(WORLD_CENTER_X, WORLD_CENTER_Y + 200, objects.buttons.exit_button)
     .setDepth(0);
 
-    const hoverSelector = this.add.sprite(100, 100, context.buttons.menu_selector);
+    const hoverSelector = this.add.sprite(100, 100, objects.buttons.menu_selector);
     hoverSelector.setScale(2);
     hoverSelector.setVisible(false);
 
@@ -61,7 +61,7 @@ export class MenuScene extends Phaser.Scene {
       // Todo: Fetch (from /src/state/game-state.ts) last save status and pass to the next scene (e.g coins, last mission, progress)
       // {coins: 99, mission: { id: 4, progress: 50} }
       // Fire up the scene and pass in our lastSaved state to the scene.
-      this.scene.start(context.scenes.scene_one, {
+      this.scene.start(objects.scenes.scene_one, {
         coins: '90'
       });
     });

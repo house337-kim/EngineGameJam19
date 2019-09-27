@@ -1,4 +1,4 @@
-export const context = {
+export const objects = {
   scenes: {
     loading: 'loading',
     menu: 'menu',
@@ -7,7 +7,8 @@ export const context = {
   images: {
     menu_logo: 'menu_logo.png',
     menu_bg: 'menu_bg.jpg',
-    scene_one_bg: 'scene_one_bg.jpg'
+    scene_one_bg: 'scene_one_bg.jpg',
+    floor: 'floor.jpg'
   },
   buttons: {
     play_button: 'play_button.png',
@@ -16,6 +17,14 @@ export const context = {
     menu_selector: 'menu_selector.png'
   },
   sprites: {
-    hero: 'hero.png'
+    small: {
+      bat: 'bat.png',
+      frog: 'frog.png',
+      ghost: 'ghost.png',
+      skeleton: 'skeleton.png'
+    },
+    medium: {
+      hero: 'hero.png'
+    }
   }
 };

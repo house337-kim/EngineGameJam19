@@ -15,7 +15,7 @@ Built with ♥️, Phaser 3 and TypeScript
 - Try to minify & compress assets before uploading `tinypng assets -r -k <KEY>` 
 - Use place holder assets as these will be swapped for the real assets
 
-- Keep all assets in the `constants.ts` as a json object, this makes it easier to load all images and can be referenced everywhere. 
+- Keep all assets in the `objects.ts` as a json object, this makes it easier to load all images and can be referenced everywhere. 
 - Save game status in `game-state.ts` ?
 - Keep all scenes under `src/scenes`
 - Try to create re-usable objects `e.g Character Sprites`
