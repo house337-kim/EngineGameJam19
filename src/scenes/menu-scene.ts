@@ -1,5 +1,6 @@
-import { context } from '../constants';
-import { addBackgroundImage } from '../utils';
+import {context} from '../constants/constants';
+import {addBackgroundImage} from '../utils/utils';
+import {WORLD_CENTER_X, WORLD_CENTER_Y} from '../constants/positions';
 
 export class MenuScene extends Phaser.Scene {
   constructor() {
@@ -8,31 +9,30 @@ export class MenuScene extends Phaser.Scene {
     });
   }
 
-  preload() {
+  public preload() {
     // Add using z-index
     // Add logo in the middle and 20% Y axis
-    this.add.image(this.game.renderer.width / 2, this.game.renderer.height * 0.2, context.images.menu_logo).setDepth(1);
+    this.add.image(WORLD_CENTER_X, this.game.renderer.height * 0.2, context.images.menu_logo).setDepth(1);
 
-    //Add background,center and fit
+    // Add background,center and fit
     addBackgroundImage(this, context.images.menu_bg);
   }
-  init() {}
 
-  create() {
+  public create() {
     console.log('This is the Menu Scene');
 
     // create the menu scene
-    let playButton = this.add
-      .image(this.game.renderer.width / 2, this.game.renderer.height / 2, context.buttons.play_button)
-      .setDepth(0);
-    let infoButton = this.add
-      .image(this.game.renderer.width / 2, this.game.renderer.height / 2 + 100, context.buttons.info_button)
-      .setDepth(0);
-    let exitButton = this.add
-      .image(this.game.renderer.width / 2, this.game.renderer.height / 2 + 200, context.buttons.exit_button)
-      .setDepth(0);
+    const playButton = this.add
+    .image(WORLD_CENTER_X, WORLD_CENTER_Y, context.buttons.play_button)
+    .setDepth(0);
+    const infoButton = this.add
+    .image(WORLD_CENTER_X, WORLD_CENTER_Y + 100, context.buttons.info_button)
+    .setDepth(0);
+    const exitButton = this.add
+    .image(WORLD_CENTER_X, WORLD_CENTER_Y + 200, context.buttons.exit_button)
+    .setDepth(0);
 
-    let hoverSelector = this.add.sprite(100, 100, context.buttons.menu_selector);
+    const hoverSelector = this.add.sprite(100, 100, context.buttons.menu_selector);
     hoverSelector.setScale(2);
     hoverSelector.setVisible(false);
 
@@ -61,7 +61,9 @@ export class MenuScene extends Phaser.Scene {
       // Todo: Fetch (from /src/state/game-state.ts) last save status and pass to the next scene (e.g coins, last mission, progress)
       // {coins: 99, mission: { id: 4, progress: 50} }
       // Fire up the scene and pass in our lastSaved state to the scene.
-      this.scene.start(context.scenes.scene_one, { coins: '90' });
+      this.scene.start(context.scenes.scene_one, {
+        coins: '90'
+      });
     });
 
     infoButton.on('pointerover', () => {

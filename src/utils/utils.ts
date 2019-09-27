@@ -1,6 +1,5 @@
 // Save utils here
-import { gameState } from './state/game-state';
-import { context } from './constants';
+import { gameState } from '../state/game-state';
 
 export function getGameState() {
   return gameState;

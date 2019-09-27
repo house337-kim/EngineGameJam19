@@ -1,5 +1,5 @@
 import 'phaser';
-import { WORLD_HEIGHT, WORLD_WIDTH } from './constants';
+import { WORLD_HEIGHT, WORLD_WIDTH } from './constants/positions';
 import { LoadingScene } from './scenes/load-scene';
 import { MenuScene } from './scenes/menu-scene';
 import { SceneOne } from './scenes/scene-one';

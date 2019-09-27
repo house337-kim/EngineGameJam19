@@ -1,4 +1,5 @@
-import { context } from '../constants';
+import {context} from '../constants/constants';
+import {WORLD_CENTER_X, WORLD_CENTER_Y} from '../constants/positions';
 
 export class LoadingScene extends Phaser.Scene {
   constructor() {
@@ -10,9 +11,10 @@ export class LoadingScene extends Phaser.Scene {
   /**
    * Loads all buttons under the path using the constants file
    */
-  loadButtons() {
+  public loadButtons() {
     this.load.setPath('/assets/buttons');
-    for (let prop in context.buttons) {
+    // tslint:disable-next-line:forin
+    for (const prop in context.buttons) {
       this.load.image(context.buttons[prop], context.buttons[prop]);
     }
   }
@@ -20,9 +22,10 @@ export class LoadingScene extends Phaser.Scene {
   /**
    * Loads all images under the path using the constants file
    */
-  loadImages() {
+  public loadImages() {
     this.load.setPath('/assets/images');
-    for (let prop in context.images) {
+    // tslint:disable-next-line:forin
+    for (const prop in context.images) {
       this.load.image(context.images[prop], context.images[prop]);
     }
   }
@@ -30,39 +33,38 @@ export class LoadingScene extends Phaser.Scene {
   /**
    * Loads all sprites under the path using the constants file
    */
-  loadSprites(frameConfig: any) {
+  public loadSprites(frameConfig: any) {
     this.load.setPath('./assets/sprites');
 
-    for (let prop in context.sprites) {
+    // tslint:disable-next-line:forin
+    for (const prop in context.sprites) {
       this.load.spritesheet(context.sprites[prop], context.sprites[prop], frameConfig);
     }
   }
 
-  init() {}
-
-  preload() {
+  public preload() {
     this.loadButtons();
     this.loadImages();
     this.loadSprites({
       frameWidth: 32,
       frameHeight: 48
     });
-    //Create loading bar
-    let loadingBar = this.add.graphics({
+    // Create loading bar
+    const loadingBar = this.add.graphics({
       fillStyle: {
-        color: 0xffffff, //white
+        color: 0xffffff, // white
         alpha: 1
       }
     });
 
-    let loadingBox = this.add.graphics({
+    const loadingBox = this.add.graphics({
       fillStyle: {
         color: 0x222222,
         alpha: 0.8
       }
     });
 
-    loadingBox.fillRect(this.game.renderer.height / 2 - 20, this.game.renderer.height / 2 - 20, 340, 70);
+    loadingBox.fillRect(WORLD_CENTER_X - 20, WORLD_CENTER_Y - 20, 340, 70);
 
     // Loader events:
     // progress - loader progress in decimal
@@ -70,7 +72,7 @@ export class LoadingScene extends Phaser.Scene {
     this.load.on('progress', percent => {
       loadingBar.clear();
       loadingBar.fillStyle(0xffffff, 1);
-      loadingBar.fillRect(this.game.renderer.height / 2, this.game.renderer.height / 2, 300 * percent, 30);
+      loadingBar.fillRect(WORLD_CENTER_X, WORLD_CENTER_Y, 300 * percent, 30);
     });
 
     this.load.on('complete', () => {
@@ -78,7 +80,7 @@ export class LoadingScene extends Phaser.Scene {
     });
   }
 
-  create() {
+  public create() {
     console.log('This is the Loader Scene');
   }
 }
