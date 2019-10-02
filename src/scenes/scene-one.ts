@@ -1,8 +1,19 @@
-import {context} from '../constants/constants';
-import { CharacterSprite } from '../objects/CharacterSprite';
-import { addBackgroundImage } from '../utils/utils';
-import { hasClickedInMovementArea } from '../utils/movement-utils';
+import {objects} from '../constants/objects';
+import {CharacterSprite} from '../objects/CharacterSprite';
+import {addBackgroundImage, addFloor} from '../helpers/utils';
+import {hasClickedInMovementArea} from '../helpers/movement-utils';
 import {PLAYER_MOVEMENT_AREA, WORLD_CENTER_X} from '../constants/positions';
+import {createSpeechBubble} from '../helpers/text-utils';
+
+function setFrogActions(scene: Phaser.Scene, frog: CharacterSprite) {
+  frog.on('pointerup', () => {
+
+    // TODO: find a better way to find x and y position (setOrigin ? )
+    // Say something and move
+    createSpeechBubble(scene, frog.x, frog.y - 120, 250, 100, 'Leave me alone');
+    frog.play('frog_jump', true);
+  });
+}
 
 export class SceneOne extends Phaser.Scene {
   public player!: Phaser.GameObjects.Container;
@@ -14,7 +25,7 @@ export class SceneOne extends Phaser.Scene {
 
   constructor() {
     super({
-      key: context.scenes.scene_one
+      key: objects.scenes.scene_one
     });
   }
 
@@ -24,7 +35,7 @@ export class SceneOne extends Phaser.Scene {
       key: 'walk_left',
       frameRate: 10,
       repeat: -1, // repeat forever
-      frames: this.anims.generateFrameNumbers(context.sprites.hero, {
+      frames: this.anims.generateFrameNumbers(objects.sprites.medium.hero, {
         start: 0,
         end: 3
       })
@@ -35,7 +46,7 @@ export class SceneOne extends Phaser.Scene {
       key: 'walk_right',
       frameRate: 10,
       repeat: -1, // repeat forever
-      frames: this.anims.generateFrameNumbers(context.sprites.hero, {
+      frames: this.anims.generateFrameNumbers(objects.sprites.medium.hero, {
         start: 5,
         end: 8
       })
@@ -46,16 +57,28 @@ export class SceneOne extends Phaser.Scene {
       key: 'idle',
       frameRate: 10,
       repeat: -1, // repeat forever
-      frames: this.anims.generateFrameNumbers(context.sprites.hero, {
+      frames: this.anims.generateFrameNumbers(objects.sprites.medium.hero, {
         start: 4,
         end: 4
+      })
+    });
+
+    // Jump animation for frog character
+    this.anims.create({
+      key: 'frog_jump',
+      frameRate: 10,
+      repeat: 3, // repeat forever
+      frames: this.anims.generateFrameNumbers(objects.sprites.small.frog, {
+        start: 0,
+        end: 2
       })
     });
   }
 
   public preload() {
     // Add background,center and fit
-    addBackgroundImage(this, context.images.scene_one_bg);
+    addBackgroundImage(this, objects.images.scene_one_bg);
+    addFloor(this, objects.images.floor);
 
     // Add movement area line
     const loadingBox = this.add.graphics({
@@ -116,6 +139,9 @@ export class SceneOne extends Phaser.Scene {
   public create() {
     console.log('Scene One - Scene');
 
-    this.hero = new CharacterSprite(this, WORLD_CENTER_X , PLAYER_MOVEMENT_AREA * 1.10, context.sprites.hero, 4);
+    this.hero = new CharacterSprite(this, WORLD_CENTER_X, PLAYER_MOVEMENT_AREA * 1.10, objects.sprites.medium.hero, 4);
+    const frog = new CharacterSprite(this, WORLD_CENTER_X + 60, PLAYER_MOVEMENT_AREA * 1.15, objects.sprites.small.frog, 0);
+    frog.setInteractive();
+    setFrogActions(this, frog);
   }
 }

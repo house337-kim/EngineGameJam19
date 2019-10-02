@@ -1,10 +1,10 @@
-import {context} from '../constants/constants';
+import {objects} from '../constants/objects';
 import {WORLD_CENTER_X, WORLD_CENTER_Y} from '../constants/positions';
 
 export class LoadingScene extends Phaser.Scene {
   constructor() {
     super({
-      key: context.scenes.loading
+      key: objects.scenes.loading
     });
   }
 
@@ -14,8 +14,8 @@ export class LoadingScene extends Phaser.Scene {
   public loadButtons() {
     this.load.setPath('/assets/buttons');
     // tslint:disable-next-line:forin
-    for (const prop in context.buttons) {
-      this.load.image(context.buttons[prop], context.buttons[prop]);
+    for (const prop in objects.buttons) {
+      this.load.image(objects.buttons[prop], objects.buttons[prop]);
     }
   }
 
@@ -25,20 +25,32 @@ export class LoadingScene extends Phaser.Scene {
   public loadImages() {
     this.load.setPath('/assets/images');
     // tslint:disable-next-line:forin
-    for (const prop in context.images) {
-      this.load.image(context.images[prop], context.images[prop]);
+    for (const prop in objects.images) {
+      this.load.image(objects.images[prop], objects.images[prop]);
     }
   }
 
   /**
-   * Loads all sprites under the path using the constants file
+   * Loads all sprites (32x48) under the path using the constants file
    */
   public loadSprites(frameConfig: any) {
-    this.load.setPath('./assets/sprites');
+    this.load.setPath('./assets/sprites/32x48');
 
     // tslint:disable-next-line:forin
-    for (const prop in context.sprites) {
-      this.load.spritesheet(context.sprites[prop], context.sprites[prop], frameConfig);
+    for (const prop in objects.sprites.medium) {
+      this.load.spritesheet(objects.sprites.medium[prop], objects.sprites.medium[prop], frameConfig);
+    }
+  }
+
+  /**
+   * Loads all sprites small size (16x16) under the path using the constants file
+   */
+  public loadSpritesSmall(frameConfig: any) {
+    this.load.setPath('./assets/sprites/16x16');
+
+    // tslint:disable-next-line:forin
+    for (const prop in objects.sprites.small) {
+      this.load.spritesheet(objects.sprites.small[prop], objects.sprites.small[prop], frameConfig);
     }
   }
 
@@ -48,6 +60,10 @@ export class LoadingScene extends Phaser.Scene {
     this.loadSprites({
       frameWidth: 32,
       frameHeight: 48
+    });
+    this.loadSpritesSmall({
+      frameWidth: 16,
+      frameHeight: 16
     });
     // Create loading bar
     const loadingBar = this.add.graphics({
@@ -76,7 +92,7 @@ export class LoadingScene extends Phaser.Scene {
     });
 
     this.load.on('complete', () => {
-      this.scene.start(context.scenes.menu);
+      this.scene.start(objects.scenes.menu);
     });
   }
 
