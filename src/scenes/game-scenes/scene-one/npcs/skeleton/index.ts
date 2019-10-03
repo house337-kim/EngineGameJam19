@@ -5,14 +5,6 @@ import { objects } from '../../../../../constants/objects';
 import { createSpeechBubble } from '../../../../../helpers/text-utils';
 import { Npc } from '../npc';
 
-function setSkeletonActions(scene: GameScene, skeleton: any) {
-  skeleton.on('pointerup', () => {
-    // Say something
-    createSpeechBubble(scene, skeleton.x, skeleton.y - 120, 250, 100, 'Screach!!');
-    skeleton.play('skeleton_walk', true);
-  });
-}
-
 export class SkeletonNpc extends Npc {
   constructor(scene: GameScene, name: string) {
     super(scene, name);
@@ -31,13 +23,22 @@ export class SkeletonNpc extends Npc {
       0
     );
     this.sprite.setInteractive();
-    setSkeletonActions(this.scene, this.sprite);
+    this.setActions();
+  }
+
+  protected setActions() {
+    const { sprite, scene } = this;
+    sprite.on('pointerup', () => {
+      // Say something
+      createSpeechBubble(scene, sprite.x, sprite.y - 120, 250, 100, 'Screach!!');
+      sprite.play('skeleton_walk', true);
+    });
   }
 
   protected walkAnimation() {
     // Jump animation for frog character
     this.anims.create({
-      key: 'skeleton_fly',
+      key: 'skeleton_walk',
       frameRate: 10,
       repeat: 3, // repeat forever
       frames: this.anims.generateFrameNumbers(objects.sprites.small.skeleton, {

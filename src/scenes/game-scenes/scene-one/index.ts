@@ -14,8 +14,9 @@ export interface StrMap {
 export class SceneOne extends AbstractGameScene {
   public checkpoint?: CheckPoint;
   protected _heroCharacter: HeroCharacter;
-  protected npcs: StrMap;
-  protected objects: StrMap;
+
+  protected npcs: StrMap = {};
+  protected objects: StrMap = {};
 
   protected npcMap: StrMap;
 
@@ -140,10 +141,14 @@ export class SceneOne extends AbstractGameScene {
     });
   }
 
+  get npcCount() {
+    return Object.keys(this.npcs).length;
+  }
+
   protected createNpcs() {
-    if (this.npcs.length > 0) return;
+    // if (this.npcCount > 0) return;
     this.npcNames.map(key => {
-      this.npcs[key] = new this.npcMap[key](this, key);
+      this.npcs[key] = this.npcs[key] || new this.npcMap[key](this, key);
     });
   }
 
