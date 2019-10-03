@@ -27,7 +27,7 @@ export const objects = {
       hero: 'hero.png'
     },
     inventory: {
-      items: 'items.png'
+      key: 'key.png'
     }
   }
 };

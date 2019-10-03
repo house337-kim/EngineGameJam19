@@ -1,7 +1,7 @@
 import { SkeletonNpc } from './skeleton';
-import { BatNpc } from './bat/index';
-import { GhostNpc } from './ghost/index';
-import { FrogNpc } from './frog/index';
+import { BatNpc } from './bat';
+import { GhostNpc } from './ghost';
+import { FrogNpc } from './frog';
 
 export const npcMap = {
   frog: FrogNpc,

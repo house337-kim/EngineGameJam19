@@ -4,8 +4,8 @@ import { PLAYER_MOVEMENT_AREA } from '../../../constants/positions';
 import { AbstractGameScene, CheckPoint } from '../abstract-game-scene';
 import { SceneOneUpdater } from './update';
 import { HeroCharacter } from './hero';
-import { CharacterSprite } from '../../../objects/CharacterSprite';
-import { FrogNpc, BatNpc, SkeletonNpc, GhostNpc, npcMap } from './npcs';
+import { npcMap } from './npcs';
+import { itemMap } from './items';
 
 export interface StrMap {
   [key: string]: any;
@@ -16,15 +16,17 @@ export class SceneOne extends AbstractGameScene {
   protected _heroCharacter: HeroCharacter;
 
   protected npcs: StrMap = {};
-  protected objects: StrMap = {};
+  protected items: StrMap = {};
 
   protected npcMap: StrMap;
+  protected itemMap: StrMap;
 
   constructor() {
     super({
       key: objects.scenes.scene_one
     });
     this.npcMap = npcMap;
+    this.itemMap = itemMap;
   }
 
   public addAnimations() {
@@ -38,6 +40,10 @@ export class SceneOne extends AbstractGameScene {
 
   get npcNames() {
     return Object.keys(this.npcMap);
+  }
+
+  get itemNames() {
+    return Object.keys(this.itemMap);
   }
 
   // TODO: maintain hash map (object) of all NPCs in each scene
@@ -131,6 +137,7 @@ export class SceneOne extends AbstractGameScene {
   protected addCharacters() {
     this.addHero();
     this.addNpcs();
+    this.addItems();
   }
 
   protected forNpcs(fnName) {
@@ -141,7 +148,19 @@ export class SceneOne extends AbstractGameScene {
     });
   }
 
+  protected forItems(fnName) {
+    this.createItems();
+
+    this.itemNames.map(key => {
+      this.items[key][fnName]();
+    });
+  }
+
   get npcCount() {
+    return Object.keys(this.npcs).length;
+  }
+
+  get itemCount() {
     return Object.keys(this.npcs).length;
   }
 
@@ -152,8 +171,19 @@ export class SceneOne extends AbstractGameScene {
     });
   }
 
+  protected createItems() {
+    // if (this.npcCount > 0) return;
+    this.itemNames.map(key => {
+      this.items[key] = this.items[key] || new this.itemMap[key](this, key);
+    });
+  }
+
   protected addNpcs() {
     this.forNpcs('addSprite');
+  }
+
+  protected addItems() {
+    this.forItems('addSprite');
   }
 
   protected addHero() {
