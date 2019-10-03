@@ -5,16 +5,16 @@ import { WORLD_CENTER_X, PLAYER_MOVEMENT_AREA, WORLD_CENTER_Y } from '../../../.
 import { objects } from '../../../../../constants/objects';
 import { createSpeechBubble } from '../../../../../helpers/text-utils';
 
-function setFrogActions(scene: GameScene, frog: any) {
-  frog.on('pointerup', () => {
+function setGhostActions(scene: GameScene, ghost: any) {
+  ghost.on('pointerup', () => {
     // TODO: find a better way to find x and y position (setOrigin ? )
     // Say something and move
-    createSpeechBubble(scene, frog.x, frog.y - 120, 250, 100, 'Leave me alone');
-    frog.play('frog_jump', true);
+    createSpeechBubble(scene, ghost.x, ghost.y - 120, 250, 100, 'BOOOO!!!');
+    ghost.play('ghost_jump', true);
   });
 }
 
-export class FrogNpc {
+export class GhostNpc {
   protected scene: any;
   protected anims: Animations;
 
@@ -23,42 +23,42 @@ export class FrogNpc {
     this.anims = scene.anims;
   }
 
-  set frog(frog: any) {
-    this.scene.frog = frog;
+  set ghost(ghost: any) {
+    this.scene.ghost = ghost;
   }
 
-  get frog(): any {
-    return this.scene.frog;
+  get ghost(): any {
+    return this.scene.ghost;
   }
 
   public add() {
-    this.addFrog();
+    this.addGhost();
     this.addAnimations();
   }
 
   public addAnimations() {
-    this.frogJumpAnimation();
+    this.ghostJumpAnimation();
   }
 
-  public addFrog() {
-    this.frog = new CharacterSprite(
+  public addGhost() {
+    this.ghost = new CharacterSprite(
       this.scene,
-      WORLD_CENTER_X + 10,
-      WORLD_CENTER_Y + 200,
-      objects.sprites.small.frog,
+      WORLD_CENTER_X + 60,
+      WORLD_CENTER_Y + 100,
+      objects.sprites.small.ghost,
       0
     );
-    this.frog.setInteractive();
-    setFrogActions(this.scene, this.frog);
+    this.ghost.setInteractive();
+    setGhostActions(this.scene, this.ghost);
   }
 
-  protected frogJumpAnimation() {
-    // Jump animation for frog character
+  protected ghostJumpAnimation() {
+    // Jump animation for ghost character
     this.anims.create({
-      key: 'frog_jump',
+      key: 'ghost_jump',
       frameRate: 10,
       repeat: 3, // repeat forever
-      frames: this.anims.generateFrameNumbers(objects.sprites.small.frog, {
+      frames: this.anims.generateFrameNumbers(objects.sprites.small.ghost, {
         start: 0,
         end: 2
       })
