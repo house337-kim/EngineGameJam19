@@ -5,23 +5,25 @@ import { AbstractGameScene, CheckPoint } from '../abstract-game-scene';
 import { SceneOneUpdater } from './update';
 import { HeroCharacter } from './hero';
 import { CharacterSprite } from '../../../objects/CharacterSprite';
-import { FrogNpc, BatNpc, SkeletonNpc, GhostNpc } from './npcs';
+import { FrogNpc, BatNpc, SkeletonNpc, GhostNpc, npcMap } from './npcs';
 
-export type Frog = CharacterSprite;
+export interface StrMap {
+  [key: string]: any;
+}
 
 export class SceneOne extends AbstractGameScene {
   public checkpoint?: CheckPoint;
-  protected frog: Frog;
   protected _heroCharacter: HeroCharacter;
-  protected _frogNpc: FrogNpc;
-  protected _batNpc: BatNpc;
-  protected _skeletonNpc: SkeletonNpc;
-  protected _ghostNpc: GhostNpc;
+  protected npcs: StrMap;
+  protected objects: StrMap;
+
+  protected npcMap: StrMap;
 
   constructor() {
     super({
       key: objects.scenes.scene_one
     });
+    this.npcMap = npcMap;
   }
 
   public addAnimations() {
@@ -33,37 +35,41 @@ export class SceneOne extends AbstractGameScene {
     this.heroCharacter.addAnimations();
   }
 
+  get npcNames() {
+    return Object.keys(this.npcMap);
+  }
+
   // TODO: maintain hash map (object) of all NPCs in each scene
   // same for objects
   public addNpcAnimations() {
-    this.addFrogAnimations();
-    this.addBatAnimations();
-    this.addSkeletonAnimations();
-    this.addGhostAnimations();
-  }
-
-  public addFrogAnimations() {
-    this.frogNpc.addAnimations();
-  }
-  public addGhostAnimations() {
-    this.ghostNpc.addAnimations();
-  }
-
-  public addBatAnimations() {
-    this.batNpc.addAnimations();
-  }
-
-  public addSkeletonAnimations() {
-    this.skeletonNpc.addAnimations();
+    this.forNpcs('addAnimations');
   }
 
   public preload() {
     // Add background,center and fit
     addBackgroundImage(this, objects.images.scene_one_bg);
+
+    // this.loadItems()
+
     // addFloor(this, objects.images.floor);
     this.drawSceneBorderLines();
 
     this.addAnimations();
+  }
+
+  /**
+   * Load items
+   */
+  public loadItems() {
+    this.load.setPath('/assets/inventory');
+    // See: https://photonstorm.github.io/phaser3-docs/Phaser.Types.Loader.FileTypes.html#.ImageFrameConfig
+    this.load.spritesheet('items', 'items.png', {
+      frameWidth: 96,
+      frameHeight: 96,
+      startFrame: 0,
+      endFrame: 8,
+      spacing: 0
+    });
   }
 
   public init(data) {
@@ -121,49 +127,31 @@ export class SceneOne extends AbstractGameScene {
     return this._heroCharacter;
   }
 
-  get frogNpc(): FrogNpc {
-    this._frogNpc = this._frogNpc || new FrogNpc(this);
-    return this._frogNpc;
-  }
-
-  get batNpc(): BatNpc {
-    this._batNpc = this._batNpc || new BatNpc(this);
-    return this._batNpc;
-  }
-
-  get skeletonNpc(): SkeletonNpc {
-    this._skeletonNpc = this._skeletonNpc || new SkeletonNpc(this);
-    return this._skeletonNpc;
-  }
-  get ghostNpc(): GhostNpc {
-    this._ghostNpc = this._ghostNpc || new GhostNpc(this);
-    return this._ghostNpc;
-  }
-
   protected addCharacters() {
     this.addHero();
-    this.addFrog();
-    this.addBat();
-    this.addSkeleton();
-    this.addGhost();
+    this.addNpcs();
+  }
+
+  protected forNpcs(fnName) {
+    this.createNpcs();
+
+    this.npcNames.map(key => {
+      this.npcs[key][fnName]();
+    });
+  }
+
+  protected createNpcs() {
+    if (this.npcs.length > 0) return;
+    this.npcNames.map(key => {
+      this.npcs[key] = new this.npcMap[key](this, key);
+    });
+  }
+
+  protected addNpcs() {
+    this.forNpcs('addSprite');
   }
 
   protected addHero() {
     this.heroCharacter.addHero();
-  }
-
-  protected addFrog() {
-    this.frogNpc.addFrog();
-  }
-
-  protected addBat() {
-    this.batNpc.addBat();
-  }
-
-  protected addSkeleton() {
-    this.skeletonNpc.addSkeleton();
-  }
-  protected addGhost() {
-    this.ghostNpc.addGhost();
   }
 }
