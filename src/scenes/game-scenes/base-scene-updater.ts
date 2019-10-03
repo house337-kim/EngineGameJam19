@@ -84,8 +84,8 @@ export abstract class BaseSceneUpdater implements SceneUpdater {
       if (hasClickedInMovementArea(pointer.worldY)) {
         this.checkpoint = { x: pointer.worldX, y: pointer.worldY };
         if (this.hero.active === true) {
-          this.onClickRight(pointer);
-          this.onClickLeft(pointer);
+          this.pointerVerticalMotion(pointer);
+          this.pointerHorisontalMotion(pointer);
         }
       }
     });
@@ -128,11 +128,11 @@ export abstract class BaseSceneUpdater implements SceneUpdater {
     this.makeXMotion(-1);
   }
 
-  protected onClickLeft(pointer) {
+  protected pointerVerticalMotion(pointer) {
     pointer.worldY > this.hero.y ? this.moveDownMotion() : this.moveUpMotion();
   }
 
-  protected onClickRight(pointer) {
+  protected pointerHorisontalMotion(pointer) {
     pointer.worldX > this.hero.x ? this.moveRightMotion() : this.moveLeftMotion();
   }
 }

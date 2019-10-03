@@ -1,24 +1,19 @@
 import { objects } from '../../../constants/objects';
-import { CharacterSprite } from '../../../objects/CharacterSprite';
-import { addBackgroundImage, addFloor } from '../../../helpers/utils';
-import { hasClickedInMovementArea } from '../../../helpers/movement-utils';
-import { PLAYER_MOVEMENT_AREA, WORLD_CENTER_X } from '../../../constants/positions';
-import { createSpeechBubble } from '../../../helpers/text-utils';
+import { addBackgroundImage } from '../../../helpers/utils';
+import { PLAYER_MOVEMENT_AREA } from '../../../constants/positions';
 import { AbstractGameScene, CheckPoint } from '../abstract-game-scene';
 import { SceneOneUpdater } from './update';
+import { HeroCharacter } from './hero';
+import { CharacterSprite } from '../../../objects/CharacterSprite';
+import { FrogNpc } from './frog';
 
-function setFrogActions(scene: Phaser.Scene, frog: CharacterSprite) {
-  frog.on('pointerup', () => {
-    // TODO: find a better way to find x and y position (setOrigin ? )
-    // Say something and move
-    createSpeechBubble(scene, frog.x, frog.y - 120, 250, 100, 'Leave me alone');
-    frog.play('frog_jump', true);
-  });
-}
+export type Frog = CharacterSprite;
 
 export class SceneOne extends AbstractGameScene {
   public checkpoint?: CheckPoint;
-  protected frog: CharacterSprite;
+  protected frog: Frog;
+  protected _heroCharacter: HeroCharacter;
+  protected _frogNpc: FrogNpc;
 
   constructor() {
     super({
@@ -32,20 +27,44 @@ export class SceneOne extends AbstractGameScene {
   }
 
   public addHeroAnimations() {
-    this.heroWalkRightAnimation();
-    this.heroWalkLeftAnimation();
-    this.heroIdleAnimation();
+    this.heroCharacter.addAnimations();
   }
 
+  // TODO: maintain hash map (object) of all NPCs in each scene
+  // same for objects
   public addNpcAnimations() {
-    this.frogJumpAnimation();
+    this.addFrogAnimations();
+  }
+
+  public addFrogAnimations() {
+    this.frogNpc.addAnimations();
   }
 
   public preload() {
     // Add background,center and fit
     addBackgroundImage(this, objects.images.scene_one_bg);
     // addFloor(this, objects.images.floor);
+    this.drawSceneBorderLines();
 
+    this.addAnimations();
+  }
+
+  public init(data) {
+    console.log('Received from previous scene:', data);
+  }
+
+  public update(time: number, delta: number) {
+    this.sceneUpdater.update(time, delta);
+  }
+
+  public create() {
+    console.log('Scene One - Scene');
+
+    this.addCharacters();
+    this.sceneUpdater = new SceneOneUpdater(this);
+  }
+
+  protected drawSceneBorderLines() {
     // Add movement area line
     const loadingBox = this.add.graphics({
       fillStyle: {
@@ -78,75 +97,16 @@ export class SceneOne extends AbstractGameScene {
       this.game.renderer.width - 300,
       PLAYER_MOVEMENT_AREA
     );
-
-    this.addAnimations();
   }
 
-  public init(data) {
-    console.log('Received from previous scene:', data);
+  get heroCharacter(): HeroCharacter {
+    this._heroCharacter = this._heroCharacter || new HeroCharacter(this);
+    return this._heroCharacter;
   }
 
-  public update(time: number, delta: number) {
-    this.sceneUpdater.update(time, delta);
-  }
-
-  public create() {
-    console.log('Scene One - Scene');
-
-    this.addCharacters();
-    this.sceneUpdater = new SceneOneUpdater(this);
-  }
-
-  protected heroIdleAnimation() {
-    // Idle animation for when character is standing waiting
-    this.anims.create({
-      key: 'idle',
-      frameRate: 10,
-      repeat: -1, // repeat forever
-      frames: this.anims.generateFrameNumbers(objects.sprites.medium.hero, {
-        start: 4,
-        end: 4
-      })
-    });
-  }
-
-  protected heroWalkLeftAnimation() {
-    // walk animation for when character is walking left
-    this.anims.create({
-      key: 'walk_left',
-      frameRate: 10,
-      repeat: -1, // repeat forever
-      frames: this.anims.generateFrameNumbers(objects.sprites.medium.hero, {
-        start: 0,
-        end: 3
-      })
-    });
-  }
-
-  protected heroWalkRightAnimation() {
-    // walk animation for when character is walking right
-    this.anims.create({
-      key: 'walk_right',
-      frameRate: 10,
-      repeat: -1, // repeat forever
-      frames: this.anims.generateFrameNumbers(objects.sprites.medium.hero, {
-        start: 5,
-        end: 8
-      })
-    });
-  }
-
-  protected frogJumpAnimation() {
-    // Jump animation for frog character
-    this.anims.create({
-      key: 'frog_jump',
-      frameRate: 10,
-      repeat: 3, // repeat forever
-      frames: this.anims.generateFrameNumbers(objects.sprites.small.frog, {
-        start: 0,
-        end: 2
-      })
-    });
+  get frogNpc(): FrogNpc {
+    this._frogNpc = this._frogNpc || new FrogNpc(this);
+    return this._frogNpc;
   }
 
   protected addCharacters() {
@@ -155,18 +115,10 @@ export class SceneOne extends AbstractGameScene {
   }
 
   protected addHero() {
-    this.hero = new CharacterSprite(this, WORLD_CENTER_X, PLAYER_MOVEMENT_AREA * 1.1, 'hero', 4);
+    this.heroCharacter.addHero();
   }
 
   protected addFrog() {
-    this.frog = new CharacterSprite(
-      this,
-      WORLD_CENTER_X + 60,
-      PLAYER_MOVEMENT_AREA * 1.15,
-      objects.sprites.small.frog,
-      0
-    );
-    this.frog.setInteractive();
-    setFrogActions(this, this.frog);
+    this.frogNpc.addFrog();
   }
 }

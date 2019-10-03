@@ -10,6 +10,7 @@ export type Player = Phaser.GameObjects.Container;
 export type Hero = Phaser.Physics.Arcade.Sprite;
 export type Input = Phaser.Input.InputPlugin;
 export type Pointer = Phaser.Input.Pointer;
+export type Animations = Phaser.Animations.AnimationManager;
 
 const config: GameConfig = {
   width: WORLD_WIDTH,
