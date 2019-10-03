@@ -1,7 +1,7 @@
 import { GameScene } from '../../../abstract-game-scene';
 import { Animations } from '../../../../../main';
 import { CharacterSprite } from '../../../../../objects/CharacterSprite';
-import { WORLD_CENTER_X, PLAYER_MOVEMENT_AREA } from '../../../../../constants/positions';
+import { WORLD_CENTER_X,  WORLD_CENTER_Y } from '../../../../../constants/positions';
 import { objects } from '../../../../../constants/objects';
 import { createSpeechBubble } from '../../../../../helpers/text-utils';
 
@@ -43,8 +43,8 @@ export class FrogNpc {
   public addFrog() {
     this.frog = new CharacterSprite(
       this.scene,
-      WORLD_CENTER_X + 60,
-      PLAYER_MOVEMENT_AREA * 1.15,
+      WORLD_CENTER_X + 10,
+      WORLD_CENTER_Y + 200,
       objects.sprites.small.frog,
       0
     );
