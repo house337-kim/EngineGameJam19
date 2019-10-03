@@ -1,10 +1,9 @@
-import { GameScene } from '../../abstract-game-scene';
-import { Animations } from '../../../../main';
-import { CharacterSprite } from '../../../../objects/CharacterSprite';
-import { Frog } from '..';
-import { WORLD_CENTER_X, PLAYER_MOVEMENT_AREA } from '../../../../constants/positions';
-import { objects } from '../../../../constants/objects';
-import { createSpeechBubble } from '../../../../helpers/text-utils';
+import { GameScene } from '../../../abstract-game-scene';
+import { Animations } from '../../../../../main';
+import { CharacterSprite } from '../../../../../objects/CharacterSprite';
+import { WORLD_CENTER_X, PLAYER_MOVEMENT_AREA } from '../../../../../constants/positions';
+import { objects } from '../../../../../constants/objects';
+import { createSpeechBubble } from '../../../../../helpers/text-utils';
 
 function setFrogActions(scene: GameScene, frog: any) {
   frog.on('pointerup', () => {

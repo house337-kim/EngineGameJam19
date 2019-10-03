@@ -5,7 +5,8 @@ import { AbstractGameScene, CheckPoint } from '../abstract-game-scene';
 import { SceneOneUpdater } from './update';
 import { HeroCharacter } from './hero';
 import { CharacterSprite } from '../../../objects/CharacterSprite';
-import { FrogNpc } from './frog';
+import { FrogNpc, BatNpc } from './npcs';
+import { SkeletonNpc } from './npcs/skeleton/index';
 
 export type Frog = CharacterSprite;
 
@@ -14,6 +15,8 @@ export class SceneOne extends AbstractGameScene {
   protected frog: Frog;
   protected _heroCharacter: HeroCharacter;
   protected _frogNpc: FrogNpc;
+  protected _batNpc: BatNpc;
+  protected _skeletonNpc: SkeletonNpc;
 
   constructor() {
     super({
@@ -34,10 +37,20 @@ export class SceneOne extends AbstractGameScene {
   // same for objects
   public addNpcAnimations() {
     this.addFrogAnimations();
+    this.addBatAnimations();
+    this.addSkeletonAnimations();
   }
 
   public addFrogAnimations() {
     this.frogNpc.addAnimations();
+  }
+
+  public addBatAnimations() {
+    this.batNpc.addAnimations();
+  }
+
+  public addSkeletonAnimations() {
+    this.skeletonNpc.addAnimations();
   }
 
   public preload() {
@@ -109,9 +122,21 @@ export class SceneOne extends AbstractGameScene {
     return this._frogNpc;
   }
 
+  get batNpc(): BatNpc {
+    this._batNpc = this._batNpc || new BatNpc(this);
+    return this._batNpc;
+  }
+
+  get skeletonNpc(): SkeletonNpc {
+    this._skeletonNpc = this._skeletonNpc || new SkeletonNpc(this);
+    return this._skeletonNpc;
+  }
+
   protected addCharacters() {
     this.addHero();
     this.addFrog();
+    this.addBat();
+    this.addSkeleton();
   }
 
   protected addHero() {
@@ -120,5 +145,13 @@ export class SceneOne extends AbstractGameScene {
 
   protected addFrog() {
     this.frogNpc.addFrog();
+  }
+
+  protected addBat() {
+    this.batNpc.addBat();
+  }
+
+  protected addSkeleton() {
+    this.skeletonNpc.addSkeleton();
   }
 }
