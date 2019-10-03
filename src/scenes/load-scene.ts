@@ -1,5 +1,5 @@
-import {objects} from '../constants/objects';
-import {WORLD_CENTER_X, WORLD_CENTER_Y} from '../constants/positions';
+import { objects } from '../constants/objects';
+import { WORLD_CENTER_X, WORLD_CENTER_Y } from '../constants/positions';
 
 export class LoadingScene extends Phaser.Scene {
   constructor() {
@@ -35,10 +35,10 @@ export class LoadingScene extends Phaser.Scene {
    */
   public loadSprites(frameConfig: any) {
     this.load.setPath('./assets/sprites/32x48');
-
+    const { medium } = objects.sprites;
     // tslint:disable-next-line:forin
-    for (const prop in objects.sprites.medium) {
-      this.load.spritesheet(objects.sprites.medium[prop], objects.sprites.medium[prop], frameConfig);
+    for (const key in medium) {
+      this.load.spritesheet(medium[key], medium[key], frameConfig);
     }
   }
 
@@ -48,9 +48,20 @@ export class LoadingScene extends Phaser.Scene {
   public loadSpritesSmall(frameConfig: any) {
     this.load.setPath('./assets/sprites/16x16');
 
+    const { small } = objects.sprites;
     // tslint:disable-next-line:forin
-    for (const prop in objects.sprites.small) {
-      this.load.spritesheet(objects.sprites.small[prop], objects.sprites.small[prop], frameConfig);
+    for (const key in small) {
+      this.load.spritesheet(small[key], small[key], frameConfig);
+    }
+  }
+
+  public loadItemsSmall(frameConfig: any) {
+    this.load.setPath('./assets/sprites/inventory');
+
+    const { inventory } = objects.sprites;
+    // tslint:disable-next-line:forin
+    for (const key in inventory) {
+      this.load.spritesheet(inventory[key], inventory[key], frameConfig);
     }
   }
 
@@ -65,6 +76,12 @@ export class LoadingScene extends Phaser.Scene {
       frameWidth: 16,
       frameHeight: 16
     });
+
+    this.loadItemsSmall({
+      frameWidth: 50,
+      frameHeight: 48
+    });
+
     // Create loading bar
     const loadingBar = this.add.graphics({
       fillStyle: {
