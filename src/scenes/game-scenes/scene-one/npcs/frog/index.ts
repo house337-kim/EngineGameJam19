@@ -1,7 +1,7 @@
 import { GameScene } from '../../../abstract-game-scene';
 import { Animations } from '../../../../../main';
 import { CharacterSprite } from '../../../../../objects/CharacterSprite';
-import { WORLD_CENTER_X, PLAYER_MOVEMENT_AREA, WORLD_CENTER_Y } from '../../../../../constants/positions';
+import { WORLD_CENTER_X,  WORLD_CENTER_Y } from '../../../../../constants/positions';
 import { objects } from '../../../../../constants/objects';
 import { createSpeechBubble } from '../../../../../helpers/text-utils';
 
