@@ -38,7 +38,7 @@ export abstract class BaseSceneUpdater implements SceneUpdater {
   protected moveRight() {
     if (this.hero.body.velocity.x > 0) {
       // moving right
-      this.hero.play('walk_right', true);
+      this.hero.play('right', true);
       if (this.checkpoint && this.hero.x > this.checkpoint.x) {
         this.hero.setVelocityX(0);
       }
@@ -48,7 +48,7 @@ export abstract class BaseSceneUpdater implements SceneUpdater {
   protected moveLeft() {
     if (this.hero.body.velocity.x < 0) {
       // moving left
-      this.hero.play('walk_left', true);
+      this.hero.play('left', true);
       if (this.checkpoint && this.hero.x < this.checkpoint.x) {
         this.hero.setVelocityX(0);
       }

@@ -24,17 +24,34 @@ export class SceneOneUpdater extends BaseSceneUpdater {
   }
 
   protected checkBoundingBox() {
-    // check if hero reached a bounding box of checkpoint.xy +- 2 and only then play idle anims.
-    if (this.checkpoint) {
-      if (this.hero.x >= this.checkpoint.x - 2 && this.hero.x <= this.checkpoint.x + 2) {
-        if (this.hero.y >= this.checkpoint.y - 2 && this.hero.y <= this.checkpoint.y + 2) {
-          this.hero.play('idle', true);
-        }
-      }
+    const { checkpoint } = this;
+    if (!checkpoint) return;
+
+    if (this.outsideBoundsX && this.outsideBoundsY) {
+      this.heroIdle();
     }
 
-    if (this.checkpoint && this.hero.y == this.checkpoint.y && this.hero.x == this.checkpoint.x) {
-      this.hero.play('idle', true);
+    if (this.onCheckpoint) {
+      this.heroIdle();
     }
+  }
+
+  get onCheckpoint() {
+    const { checkpoint, hero } = this;
+    return hero.y == checkpoint.y && hero.x == checkpoint.x;
+  }
+
+  get outsideBoundsY() {
+    const { checkpoint, hero } = this;
+    return hero.y >= checkpoint.y - 2 && hero.y <= checkpoint.y + 2;
+  }
+
+  get outsideBoundsX() {
+    const { checkpoint, hero } = this;
+    return hero.x >= checkpoint.x - 2 && hero.x <= checkpoint.x + 2;
+  }
+
+  protected heroIdle() {
+    this.hero.play('idle', true);
   }
 }

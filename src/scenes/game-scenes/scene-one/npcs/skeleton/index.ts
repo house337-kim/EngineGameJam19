@@ -14,10 +14,6 @@ export class SkeletonNpc extends Npc {
   }
 
   protected walkAnimation() {
-    this.addAnimation('walk', {
-      start: 0,
-      end: 2,
-      repeat: 3
-    });
+    this.addAnimation('walk');
   }
 }

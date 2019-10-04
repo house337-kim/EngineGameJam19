@@ -51,15 +51,15 @@ export abstract class GameObject {
     const { scene, assetPath, name } = this;
     if (!assetPath) return;
     const fullPath = ['/assets', assetPath].join('/');
-    console.log({ name, fullPath });
     scene.load.image(name, fullPath);
   }
 
   protected speechOnClick(message: string) {
     const { sprite, scene } = this;
     sprite.on('pointerup', () => {
-      // Say something
       createSpeechBubble(scene, sprite.x, sprite.y - 120, 250, 100, message);
+
+      if (!this.hasAnimation) return;
       sprite.play(this.defaultAnimation, true);
     });
   }
@@ -96,16 +96,21 @@ export abstract class GameObject {
     this.message && this.speechOnClick(this.message);
   }
 
+  protected addRepeatAnimation(key: string, opts: any = {}) {
+    this.addAnimation(key, { ...opts, repeat: -1 });
+  }
+
   protected addAnimation(key: string, opts: any = {}) {
     if (!this.hasAnimation) return;
-
-    console.log('addAnimation', this.hasAnimation, this.name);
-
-    const { name, spriteObj } = this;
-    const { start, end } = opts;
-    const repeat = opts.repeat || -1;
+    const { spriteObj } = this;
+    let { start, end } = opts;
+    start = start || 0;
+    end = end || 2;
+    const frames = end - start + 1;
+    const repeat = opts.repeat || frames;
     const frameRate = opts.frameRate || 10;
-    const animKey = `${name}_${key}`;
+    const animKey = key;
+
     this.anims.create({
       key: animKey,
       frameRate,

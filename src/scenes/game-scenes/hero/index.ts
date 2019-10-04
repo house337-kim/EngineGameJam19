@@ -26,40 +26,23 @@ export class HeroCharacter extends GameObject {
 
   protected heroIdleAnimation() {
     // Idle animation for when character is standing waiting
-    this.anims.create({
-      key: 'idle',
-      frameRate: 10,
-      repeat: -1, // repeat forever
-      frames: this.anims.generateFrameNumbers(objects.sprites.medium.hero, {
-        start: 4,
-        end: 4
-      })
+    this.addRepeatAnimation('idle', {
+      start: 4,
+      end: 4
     });
   }
 
   protected heroWalkLeftAnimation() {
-    // walk animation for when character is walking left
-    this.anims.create({
-      key: 'walk_left',
-      frameRate: 10,
-      repeat: -1, // repeat forever
-      frames: this.anims.generateFrameNumbers(objects.sprites.medium.hero, {
-        start: 0,
-        end: 3
-      })
+    this.addRepeatAnimation('left', {
+      start: 0,
+      end: 3
     });
   }
 
   protected heroWalkRightAnimation() {
-    // walk animation for when character is walking right
-    this.anims.create({
-      key: 'walk_right',
-      frameRate: 10,
-      repeat: -1, // repeat forever
-      frames: this.anims.generateFrameNumbers(objects.sprites.medium.hero, {
-        start: 5,
-        end: 8
-      })
+    this.addRepeatAnimation('right', {
+      start: 5,
+      end: 8
     });
   }
 }
