@@ -185,7 +185,12 @@ Every NPC character must for now have the following public methods:
 - `addSprite`
 
 ```ts
+import { GameScene } from '../../../abstract-game-scene';
+import { Npc } from '../npc';
+
 export class SkeletonNpc extends Npc {
+  protected coords = { x: -260, y: 100 };
+
   constructor(scene: GameScene, name: string) {
     super(scene, name);
   }
@@ -194,37 +199,15 @@ export class SkeletonNpc extends Npc {
     this.walkAnimation();
   }
 
-  // TODO: generalise common pattern
-  public addSprite() {
-    this.sprite = new CharacterSprite(
-      this.scene,
-      WORLD_CENTER_X - 260,
-      WORLD_CENTER_Y + 100,
-      objects.sprites.small.skeleton,
-      0
-    );
-    this.sprite.setInteractive();
-    this.setActions();
-  }
-
   protected setActions() {
-    const { sprite, scene } = this;
-    sprite.on('pointerup', () => {
-      // Say something
-      createSpeechBubble(scene, sprite.x, sprite.y - 120, 250, 100, 'Screach!!');
-      sprite.play('skeleton_walk', true);
-    });
+    this.speechOnClick('Screach!!');
   }
 
   protected walkAnimation() {
-    this.anims.create({
-      key: 'skeleton_walk',
-      frameRate: 10,
-      repeat: 3,
-      frames: this.anims.generateFrameNumbers(objects.sprites.small.skeleton, {
-        start: 0,
-        end: 2
-      })
+    this.addAnimation('walk', {
+      start: 0,
+      end: 2,
+      repeat: 3
     });
   }
 }
@@ -245,6 +228,8 @@ export { KeyItem };
 ```
 
 ### Item
+
+The `Item` class like `Npc` also extends from `GameObject`, which provides a number of helper methods as can be seen for the `Skeleton` class.
 
 ```ts
 export class KeyItem extends Item {

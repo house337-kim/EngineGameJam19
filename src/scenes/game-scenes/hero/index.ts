@@ -3,23 +3,15 @@ import { GameScene } from '../abstract-game-scene';
 import { CharacterSprite } from '../../../objects/CharacterSprite';
 import { Hero, Animations } from '../../../main';
 import { WORLD_CENTER_X, PLAYER_MOVEMENT_AREA } from '../../../constants/positions';
+import { GameObject } from '../game-object';
 
-export class HeroCharacter {
-  protected scene: GameScene;
-  protected anims: Animations;
-
+export class HeroCharacter extends GameObject {
   constructor(scene: GameScene) {
-    this.scene = scene;
-    this.anims = scene.anims;
+    super(scene, 'hero');
   }
 
   set hero(hero: Hero) {
     this.scene.hero = hero;
-  }
-
-  public add() {
-    this.addSprite();
-    this.addAnimations();
   }
 
   public addSprite() {
