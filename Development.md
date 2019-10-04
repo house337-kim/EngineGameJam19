@@ -233,36 +233,13 @@ The `Item` class like `Npc` also extends from `GameObject`, which provides a num
 
 ```ts
 export class KeyItem extends Item {
+  protected coords = { x: -80, y: 80 };
+  protected scale = 0.8;
+  protected message = 'Pick me up!';
+  protected assetPath = 'inventory/key.png';
+
   constructor(scene: GameScene, name: string) {
     super(scene, name);
-  }
-
-  public loadImage() {
-    this.load.image('key', '/assets/inventory/key.png');
-  }
-
-  public addSprite() {
-    const { scene } = this;
-    // reference the loaded image called: 'key'
-    const sprite = scene.add.sprite(WORLD_CENTER_X - 80, WORLD_CENTER_Y + 80, 'key');
-
-    // make sprite interactive (ie. can click on it and such)
-    sprite.setInteractive();
-    sprite.setScale(0.8);
-
-    // add to sprites map by name
-    scene.sprites[this.name] = sprite;
-    this.sprite = sprite;
-    this.setActions();
-  }
-
-  protected setActions() {
-    const { sprite, scene } = this;
-    // show speech bubble when clicked
-    sprite.on('pointerup', () => {
-      // Say something
-      createSpeechBubble(scene, sprite.x, sprite.y - 120, 250, 100, 'Pick me up!');
-    });
   }
 }
 ```

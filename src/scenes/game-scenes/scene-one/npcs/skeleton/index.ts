@@ -3,6 +3,7 @@ import { Npc } from '../npc';
 
 export class SkeletonNpc extends Npc {
   protected coords = { x: -260, y: 100 };
+  protected message = 'Screach!!';
 
   constructor(scene: GameScene, name: string) {
     super(scene, name);
@@ -10,10 +11,6 @@ export class SkeletonNpc extends Npc {
 
   public addAnimations() {
     this.walkAnimation();
-  }
-
-  protected setActions() {
-    this.speechOnClick('Screach!!');
   }
 
   protected walkAnimation() {

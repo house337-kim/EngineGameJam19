@@ -13,13 +13,16 @@ interface Coords {
 }
 
 export abstract class GameObject {
-  protected coords: Coords = { x: randModf(600), y: randModf(200) };
+  protected coords: Coords = { x: randModf(600), y: randModf(100) };
   protected scene: any;
   protected name: string;
   protected anims: Animations;
   protected size: string;
   protected animations: StrMap = {};
   protected defaultAnimation: string;
+  protected scale: number = 1;
+  protected assetPath: string;
+  protected message: string;
 
   constructor(scene: GameScene, name: string) {
     this.scene = scene;
@@ -43,7 +46,14 @@ export abstract class GameObject {
   }
 
   public addAnimations() {}
-  public loadImage() {}
+
+  public loadImage() {
+    const { scene, assetPath, name } = this;
+    if (!assetPath) return;
+    const fullPath = ['/assets', assetPath].join('/');
+    console.log({ name, fullPath });
+    scene.load.image(name, fullPath);
+  }
 
   protected speechOnClick(message: string) {
     const { sprite, scene } = this;
@@ -60,21 +70,38 @@ export abstract class GameObject {
   }
 
   protected addSprite() {
-    this.sprite = new CharacterSprite(
-      this.scene,
-      WORLD_CENTER_X - this.coords.x,
-      WORLD_CENTER_Y + this.coords.y,
-      this.spriteObj,
-      0
-    );
-    this.sprite.setInteractive();
+    const { name, scene, scale } = this;
+    const sprite = this.createSprite();
+    this.sprite = sprite;
+    scene.sprites[name] = sprite;
+    sprite.setInteractive();
+    sprite.setScale(scale);
     this.setActions();
   }
 
-  protected setActions() {}
+  get x() {
+    return WORLD_CENTER_X + this.coords.x;
+  }
+
+  get y() {
+    return WORLD_CENTER_Y + this.coords.y;
+  }
+
+  protected createSprite() {
+    const { scene, spriteObj, x, y } = this;
+    return new CharacterSprite(scene, x, y, spriteObj, 0);
+  }
+
+  protected setActions() {
+    this.message && this.speechOnClick(this.message);
+  }
 
   protected addAnimation(key: string, opts: any = {}) {
-    const { name, size } = this;
+    if (!this.hasAnimation) return;
+
+    console.log('addAnimation', this.hasAnimation, this.name);
+
+    const { name, spriteObj } = this;
     const { start, end } = opts;
     const repeat = opts.repeat || -1;
     const frameRate = opts.frameRate || 10;
@@ -83,12 +110,16 @@ export abstract class GameObject {
       key: animKey,
       frameRate,
       repeat,
-      frames: this.anims.generateFrameNumbers(this.spriteObj, {
+      frames: this.anims.generateFrameNumbers(spriteObj, {
         start,
         end
       })
     });
     this.animations[animKey] = true;
     this.defaultAnimation = animKey;
+  }
+
+  get hasAnimation() {
+    return true;
   }
 }
