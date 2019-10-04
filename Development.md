@@ -19,32 +19,46 @@
 - `abstract-game-scene` abstract class for game scenes that each Game scene should extend
 - `base-scene-updater` update functionality common to all scenes, such as moving the main character
 
-### Scene one
+### Abstract Game scene
 
-- `/hero` the `HeroCharacter` class used to adds the hero sprite and animations to the scene
-- `/items` the items to be used on this scene
-- `/npcs` the NPCs (Non-Player characters) to be used on this scene
+The `AbstractGameScene` should serve as the base class for most scenes in the game. It will include common functionality used across most scenes:
 
-A scene uses this pattern:
+- add hero
+- add NPCs
+- add Items
+- inventory display
+- ...
 
 ```ts
-import { npcMap } from './npcs';
-import { itemMap } from './items';
+export abstract class AbstractGameScene extends Phaser.Scene implements GameScene {
+  public player!: Player;
+  public hero!: Hero;
+  public input: Input;
+  public sceneUpdater: BaseSceneUpdater;
+  public inventory: Inventory;
 
-export class SceneOne extends AbstractGameScene {
-  constructor() {
-    super({
-      key: objects.scenes.scene_one
-    });
+  public checkpoint?: CheckPoint;
+  protected _heroCharacter: HeroCharacter;
 
-    this.npcMap = npcMap; // configure NPCs for the scene
-    this.itemMap = itemMap; // configure Items for the scene
+  protected npcs: StrMap = {};
+  protected items: StrMap = {};
+
+  protected npcMap: StrMap = {};
+  protected itemMap: StrMap = {};
+
+  protected sprites: StrMap = {};
+
+  constructor(opts = {}) {
+    super(opts);
+    this.inventory = new Inventory(this);
   }
+
+  // override as needed
 
   public addAnimations() {
     this.addHeroAnimations();
     this.addNpcAnimations();
-    // this.addItemAnimations();
+    this.addItemAnimations();
   }
 
   // called to load assets before create which can reference and add them to the scene
@@ -69,13 +83,8 @@ export class SceneOne extends AbstractGameScene {
 
     this.addCharacters();
     this.addItems();
-    this.addItemImages();
 
     this.sceneUpdater = new SceneOneUpdater(this);
-  }
-
-  protected addItemImages() {
-    this.addKeyItem();
   }
 
   protected addCharacters() {
@@ -83,7 +92,35 @@ export class SceneOne extends AbstractGameScene {
     this.addNpcs();
   }
 
+  protected addItems() {
+    this.forItems('addSprite');
+  }
+
   // ...
+}
+```
+
+### Scene one
+
+- `/hero` the `HeroCharacter` class used to adds the hero sprite and animations to the scene
+- `/items` the items to be used on this scene
+- `/npcs` the NPCs (Non-Player characters) to be used on this scene
+
+A scene uses this pattern:
+
+```ts
+import { npcMap } from './npcs';
+import { itemMap } from './items';
+
+export class SceneOne extends AbstractGameScene {
+  constructor() {
+    super({
+      key: objects.scenes.scene_one
+    });
+
+    this.npcMap = npcMap; // configure NPCs for the scene
+    this.itemMap = itemMap; // configure Items for the scene
+  }
 }
 ```
 

@@ -1,8 +1,8 @@
-import { objects } from '../../../../constants/objects';
-import { GameScene } from '../../abstract-game-scene';
-import { CharacterSprite } from '../../../../objects/CharacterSprite';
-import { Hero, Animations } from '../../../../main';
-import { WORLD_CENTER_X, PLAYER_MOVEMENT_AREA } from '../../../../constants/positions';
+import { objects } from '../../../constants/objects';
+import { GameScene } from '../abstract-game-scene';
+import { CharacterSprite } from '../../../objects/CharacterSprite';
+import { Hero, Animations } from '../../../main';
+import { WORLD_CENTER_X, PLAYER_MOVEMENT_AREA } from '../../../constants/positions';
 
 export class HeroCharacter {
   protected scene: GameScene;
