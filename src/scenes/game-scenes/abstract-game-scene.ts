@@ -2,6 +2,7 @@ import { objects } from '../../constants/objects';
 import { Player, Hero, Input, Animations } from '../../main';
 import { SceneUpdater } from './scene-one/update';
 import { BaseSceneUpdater } from './base-scene-updater';
+import { Inventory } from './inventory/index';
 
 export interface GameScene extends Phaser.Scene {
   player: Player;
@@ -21,8 +22,10 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   public input: Input;
   public sceneUpdater: BaseSceneUpdater;
   public checkpoint?: CheckPoint;
+  public inventory: Inventory;
 
   constructor(opts = {}) {
     super(opts);
+    this.inventory = new Inventory(this);
   }
 }

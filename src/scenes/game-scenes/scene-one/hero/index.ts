@@ -18,11 +18,11 @@ export class HeroCharacter {
   }
 
   public add() {
-    this.addHero();
+    this.addSprite();
     this.addAnimations();
   }
 
-  public addHero() {
+  public addSprite() {
     this.hero = new CharacterSprite(this.scene, WORLD_CENTER_X, PLAYER_MOVEMENT_AREA * 1.1, 'hero', 4);
   }
 

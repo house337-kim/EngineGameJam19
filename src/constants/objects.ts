@@ -25,6 +25,9 @@ export const objects = {
     },
     medium: {
       hero: 'hero.png'
+    },
+    inventory: {
+      key: 'key.png'
     }
   }
 };

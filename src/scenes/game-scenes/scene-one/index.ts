@@ -1,27 +1,35 @@
 import { objects } from '../../../constants/objects';
 import { addBackgroundImage } from '../../../helpers/utils';
-import { PLAYER_MOVEMENT_AREA } from '../../../constants/positions';
+import { PLAYER_MOVEMENT_AREA, WORLD_CENTER_X, WORLD_CENTER_Y } from '../../../constants/positions';
 import { AbstractGameScene, CheckPoint } from '../abstract-game-scene';
 import { SceneOneUpdater } from './update';
 import { HeroCharacter } from './hero';
-import { CharacterSprite } from '../../../objects/CharacterSprite';
-import { FrogNpc, BatNpc, SkeletonNpc, GhostNpc } from './npcs';
+import { npcMap } from './npcs';
+import { itemMap } from './items';
+import { createSpeechBubble } from '../../../helpers/text-utils';
 
-export type Frog = CharacterSprite;
+export interface StrMap {
+  [key: string]: any;
+}
 
 export class SceneOne extends AbstractGameScene {
   public checkpoint?: CheckPoint;
-  protected frog: Frog;
   protected _heroCharacter: HeroCharacter;
-  protected _frogNpc: FrogNpc;
-  protected _batNpc: BatNpc;
-  protected _skeletonNpc: SkeletonNpc;
-  protected _ghostNpc: GhostNpc;
+
+  protected npcs: StrMap = {};
+  protected items: StrMap = {};
+
+  protected npcMap: StrMap = {};
+  protected itemMap: StrMap = {};
+
+  protected images: StrMap = {};
 
   constructor() {
     super({
       key: objects.scenes.scene_one
     });
+    this.npcMap = npcMap;
+    this.itemMap = itemMap;
   }
 
   public addAnimations() {
@@ -33,37 +41,36 @@ export class SceneOne extends AbstractGameScene {
     this.heroCharacter.addAnimations();
   }
 
+  get npcNames() {
+    return Object.keys(this.npcMap);
+  }
+
+  get itemNames() {
+    return Object.keys(this.itemMap);
+  }
+
   // TODO: maintain hash map (object) of all NPCs in each scene
   // same for objects
   public addNpcAnimations() {
-    this.addFrogAnimations();
-    this.addBatAnimations();
-    this.addSkeletonAnimations();
-    this.addGhostAnimations();
-  }
-
-  public addFrogAnimations() {
-    this.frogNpc.addAnimations();
-  }
-  public addGhostAnimations() {
-    this.ghostNpc.addAnimations();
-  }
-
-  public addBatAnimations() {
-    this.batNpc.addAnimations();
-  }
-
-  public addSkeletonAnimations() {
-    this.skeletonNpc.addAnimations();
+    this.forNpcs('addAnimations');
   }
 
   public preload() {
     // Add background,center and fit
     addBackgroundImage(this, objects.images.scene_one_bg);
+
+    // this.loadItems()
+    this.loadKey();
+
     // addFloor(this, objects.images.floor);
     this.drawSceneBorderLines();
 
     this.addAnimations();
+  }
+
+  // TODO: move to items/key
+  public loadKey() {
+    this.load.image('key', '/assets/inventory/key.png');
   }
 
   public init(data) {
@@ -78,6 +85,10 @@ export class SceneOne extends AbstractGameScene {
     console.log('Scene One - Scene');
 
     this.addCharacters();
+    this.addItems();
+
+    this.addItemImages();
+
     this.sceneUpdater = new SceneOneUpdater(this);
   }
 
@@ -121,49 +132,75 @@ export class SceneOne extends AbstractGameScene {
     return this._heroCharacter;
   }
 
-  get frogNpc(): FrogNpc {
-    this._frogNpc = this._frogNpc || new FrogNpc(this);
-    return this._frogNpc;
+  protected addItemImages() {
+    this.addKeyItem();
   }
 
-  get batNpc(): BatNpc {
-    this._batNpc = this._batNpc || new BatNpc(this);
-    return this._batNpc;
-  }
+  // TODO: move to items/key
+  protected addKeyItem() {
+    const key = this.add.sprite(WORLD_CENTER_X - 80, WORLD_CENTER_Y + 80, 'key');
+    key.setInteractive();
+    key.setScale(0.8);
+    this.images['key'] = key;
 
-  get skeletonNpc(): SkeletonNpc {
-    this._skeletonNpc = this._skeletonNpc || new SkeletonNpc(this);
-    return this._skeletonNpc;
-  }
-  get ghostNpc(): GhostNpc {
-    this._ghostNpc = this._ghostNpc || new GhostNpc(this);
-    return this._ghostNpc;
+    key.on('pointerup', () => {
+      // Say something
+      createSpeechBubble(this, key.x, key.y - 120, 250, 100, 'Use me to unlock the secrets...');
+    });
   }
 
   protected addCharacters() {
     this.addHero();
-    this.addFrog();
-    this.addBat();
-    this.addSkeleton();
-    this.addGhost();
+    this.addNpcs();
+  }
+
+  protected forNpcs(fnName) {
+    this.createNpcs();
+
+    this.npcNames.map(key => {
+      this.npcs[key][fnName]();
+    });
+  }
+
+  protected forItems(fnName) {
+    this.createItems();
+
+    this.itemNames.map(key => {
+      this.items[key][fnName]();
+    });
+  }
+
+  get npcCount() {
+    return Object.keys(this.npcs).length;
+  }
+
+  get itemCount() {
+    return Object.keys(this.npcs).length;
+  }
+
+  protected createNpcs() {
+    // if (this.npcCount > 0) return;
+    this.npcNames.map(key => {
+      this.npcs[key] = this.npcs[key] || new this.npcMap[key](this, key);
+    });
+  }
+
+  protected createItems() {
+    // if (this.npcCount > 0) return;
+    this.itemNames.map(key => {
+      this.items[key] = this.items[key] || new this.itemMap[key](this, key);
+    });
+  }
+
+  protected addNpcs() {
+    this.forNpcs('addSprite');
+  }
+
+  protected addItems() {
+    // this.forItems('addSprite');
   }
 
   protected addHero() {
-    this.heroCharacter.addHero();
-  }
-
-  protected addFrog() {
-    this.frogNpc.addFrog();
-  }
-
-  protected addBat() {
-    this.batNpc.addBat();
-  }
-
-  protected addSkeleton() {
-    this.skeletonNpc.addSkeleton();
-  }
-  protected addGhost() {
-    this.ghostNpc.addGhost();
+    this.heroCharacter.addSprite();
   }
 }
