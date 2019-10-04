@@ -21,11 +21,13 @@ export abstract class Item {
   }
 
   public add() {
+    this.loadImage();
     this.addSprite();
     this.addAnimations();
   }
 
-  protected abstract addSprite();
-  // tslint:disable-next-line: no-empty
-  protected addAnimations() {}
+  public addAnimations() {}
+  public loadImage() {}
+
+  public abstract addSprite(): void;
 }

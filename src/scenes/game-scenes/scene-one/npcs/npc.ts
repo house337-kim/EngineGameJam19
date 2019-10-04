@@ -21,10 +21,13 @@ export abstract class Npc {
   }
 
   public add() {
+    this.loadImage();
     this.addSprite();
     this.addAnimations();
   }
 
-  protected abstract addSprite();
-  protected abstract addAnimations();
+  public addAnimations() {}
+  public loadImage() {}
+
+  public abstract addSprite(): void;
 }

@@ -47,7 +47,7 @@ export class SceneOne extends AbstractGameScene {
     // this.addItemAnimations();
   }
 
-  // called after create
+  // called to load assets before create which can reference and add them to the scene
   public preload() {
     // Add background,center and fit
     addBackgroundImage(this, objects.images.scene_one_bg);
@@ -63,7 +63,7 @@ export class SceneOne extends AbstractGameScene {
     this.sceneUpdater.update(time, delta);
   }
 
-  // called before preload
+  // reference loaded assets and add them to the scene
   public create() {
     console.log('Scene One - Scene');
 
@@ -197,28 +197,50 @@ export class SkeletonNpc extends Npc {
 
 Same as NPCs, but exports a `itemMap`
 
+```ts
+import { KeyItem } from './key/';
+
+export const itemMap = {
+  key: KeyItem
+};
+
+export { KeyItem };
+```
+
 ### Item
 
 ```ts
-  public loadKey() {
+export class KeyItem extends Item {
+  constructor(scene: GameScene, name: string) {
+    super(scene, name);
+  }
+
+  public loadImage() {
     this.load.image('key', '/assets/inventory/key.png');
   }
 
-  protected addKeyItem() {
+  public addSprite() {
+    const { scene } = this;
     // reference the loaded image called: 'key'
-    const key = this.add.sprite(WORLD_CENTER_X - 80, WORLD_CENTER_Y + 80, 'key');
+    const sprite = scene.add.sprite(WORLD_CENTER_X - 80, WORLD_CENTER_Y + 80, 'key');
 
-    // make it interactive (ie. can click on it and such)
-    key.setInteractive();
-    key.setScale(0.8);
+    // make sprite interactive (ie. can click on it and such)
+    sprite.setInteractive();
+    sprite.setScale(0.8);
 
-    // add to images map
-    this.images['key'] = key;
+    // add to sprites map by name
+    scene.sprites[this.name] = sprite;
+    this.sprite = sprite;
+    this.setActions();
+  }
 
+  protected setActions() {
+    const { sprite, scene } = this;
     // show speech bubble when clicked
-    key.on('pointerup', () => {
+    sprite.on('pointerup', () => {
       // Say something
-      createSpeechBubble(this, key.x, key.y - 120, 250, 100, 'Use me to unlock the secrets...');
+      createSpeechBubble(scene, sprite.x, sprite.y - 120, 250, 100, 'Pick me up!');
     });
   }
+}
 ```

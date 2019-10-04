@@ -22,7 +22,7 @@ export class SceneOne extends AbstractGameScene {
   protected npcMap: StrMap = {};
   protected itemMap: StrMap = {};
 
-  protected images: StrMap = {};
+  protected sprites: StrMap = {};
 
   constructor() {
     super({
@@ -59,18 +59,11 @@ export class SceneOne extends AbstractGameScene {
     // Add background,center and fit
     addBackgroundImage(this, objects.images.scene_one_bg);
 
-    // this.loadItems()
-    this.loadKey();
-
     // addFloor(this, objects.images.floor);
     this.drawSceneBorderLines();
 
+    this.loadImages();
     this.addAnimations();
-  }
-
-  // TODO: move to items/key
-  public loadKey() {
-    this.load.image('key', '/assets/inventory/key.png');
   }
 
   public init(data) {
@@ -86,8 +79,6 @@ export class SceneOne extends AbstractGameScene {
 
     this.addCharacters();
     this.addItems();
-
-    this.addItemImages();
 
     this.sceneUpdater = new SceneOneUpdater(this);
   }
@@ -132,21 +123,8 @@ export class SceneOne extends AbstractGameScene {
     return this._heroCharacter;
   }
 
-  protected addItemImages() {
-    this.addKeyItem();
-  }
-
-  // TODO: move to items/key
-  protected addKeyItem() {
-    const key = this.add.sprite(WORLD_CENTER_X - 80, WORLD_CENTER_Y + 80, 'key');
-    key.setInteractive();
-    key.setScale(0.8);
-    this.images['key'] = key;
-
-    key.on('pointerup', () => {
-      // Say something
-      createSpeechBubble(this, key.x, key.y - 120, 250, 100, 'Use me to unlock the secrets...');
-    });
+  protected loadImages() {
+    this.forItems('loadImage');
   }
 
   protected addCharacters() {
@@ -197,7 +175,7 @@ export class SceneOne extends AbstractGameScene {
   }
 
   protected addItems() {
-    // this.forItems('addSprite');
+    this.forItems('addSprite');
   }
 
   protected addHero() {

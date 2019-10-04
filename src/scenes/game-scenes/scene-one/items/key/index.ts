@@ -10,20 +10,18 @@ export class KeyItem extends Item {
     super(scene, name);
   }
 
-  public add() {
-    this.addSprite();
-    this.addAnimations();
+  public loadImage() {
+    this.scene.load.image('key', '/assets/inventory/key.png');
   }
 
   public addSprite() {
-    this.sprite = new CharacterSprite(
-      this.scene,
-      WORLD_CENTER_X + 180,
-      WORLD_CENTER_Y + 340,
-      objects.sprites.inventory.key,
-      0
-    );
-    this.sprite.setInteractive();
+    const { scene } = this;
+    const sprite = scene.add.sprite(WORLD_CENTER_X - 80, WORLD_CENTER_Y + 80, 'key');
+
+    sprite.setInteractive();
+    sprite.setScale(0.8);
+    scene.sprites[this.name] = sprite;
+    this.sprite = sprite;
     this.setActions();
   }
 
