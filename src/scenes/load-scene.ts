@@ -77,10 +77,10 @@ export class LoadingScene extends Phaser.Scene {
       frameHeight: 16
     });
 
-    this.loadItemsSmall({
-      frameWidth: 50,
-      frameHeight: 48
-    });
+    // this.loadItemsSmall({
+    //   frameWidth: 50,
+    //   frameHeight: 48
+    // });
 
     // Create loading bar
     const loadingBar = this.add.graphics({

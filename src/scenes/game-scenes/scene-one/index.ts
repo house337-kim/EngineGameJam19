@@ -1,11 +1,12 @@
 import { objects } from '../../../constants/objects';
 import { addBackgroundImage } from '../../../helpers/utils';
-import { PLAYER_MOVEMENT_AREA } from '../../../constants/positions';
+import { PLAYER_MOVEMENT_AREA, WORLD_CENTER_X, WORLD_CENTER_Y } from '../../../constants/positions';
 import { AbstractGameScene, CheckPoint } from '../abstract-game-scene';
 import { SceneOneUpdater } from './update';
 import { HeroCharacter } from './hero';
 import { npcMap } from './npcs';
 import { itemMap } from './items';
+import { createSpeechBubble } from '../../../helpers/text-utils';
 
 export interface StrMap {
   [key: string]: any;
@@ -18,8 +19,10 @@ export class SceneOne extends AbstractGameScene {
   protected npcs: StrMap = {};
   protected items: StrMap = {};
 
-  protected npcMap: StrMap;
-  protected itemMap: StrMap;
+  protected npcMap: StrMap = {};
+  protected itemMap: StrMap = {};
+
+  protected images: StrMap = {};
 
   constructor() {
     super({
@@ -57,6 +60,7 @@ export class SceneOne extends AbstractGameScene {
     addBackgroundImage(this, objects.images.scene_one_bg);
 
     // this.loadItems()
+    this.loadKey();
 
     // addFloor(this, objects.images.floor);
     this.drawSceneBorderLines();
@@ -64,19 +68,9 @@ export class SceneOne extends AbstractGameScene {
     this.addAnimations();
   }
 
-  /**
-   * Load items
-   */
-  public loadItems() {
-    this.load.setPath('/assets/inventory');
-    // See: https://photonstorm.github.io/phaser3-docs/Phaser.Types.Loader.FileTypes.html#.ImageFrameConfig
-    this.load.spritesheet('items', 'items.png', {
-      frameWidth: 96,
-      frameHeight: 96,
-      startFrame: 0,
-      endFrame: 8,
-      spacing: 0
-    });
+  // TODO: move to items/key
+  public loadKey() {
+    this.load.image('key', '/assets/inventory/key.png');
   }
 
   public init(data) {
@@ -91,6 +85,10 @@ export class SceneOne extends AbstractGameScene {
     console.log('Scene One - Scene');
 
     this.addCharacters();
+    this.addItems();
+
+    this.addItemImages();
+
     this.sceneUpdater = new SceneOneUpdater(this);
   }
 
@@ -134,10 +132,26 @@ export class SceneOne extends AbstractGameScene {
     return this._heroCharacter;
   }
 
+  protected addItemImages() {
+    this.addKeyItem();
+  }
+
+  // TODO: move to items/key
+  protected addKeyItem() {
+    const key = this.add.sprite(WORLD_CENTER_X - 80, WORLD_CENTER_Y + 80, 'key');
+    key.setInteractive();
+    key.setScale(0.8);
+    this.images['key'] = key;
+
+    key.on('pointerup', () => {
+      // Say something
+      createSpeechBubble(this, key.x, key.y - 120, 250, 100, 'Use me to unlock the secrets...');
+    });
+  }
+
   protected addCharacters() {
     this.addHero();
     this.addNpcs();
-    this.addItems();
   }
 
   protected forNpcs(fnName) {
@@ -183,10 +197,10 @@ export class SceneOne extends AbstractGameScene {
   }
 
   protected addItems() {
-    this.forItems('addSprite');
+    // this.forItems('addSprite');
   }
 
   protected addHero() {
-    this.heroCharacter.addHero();
+    this.heroCharacter.addSprite();
   }
 }
