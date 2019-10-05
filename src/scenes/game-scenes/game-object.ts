@@ -24,6 +24,8 @@ export abstract class GameObject {
   protected assetPath: string;
   protected message: string;
   protected annimationNames = [];
+  protected objMap: StrMap = {};
+  protected hasAnim: boolean = true;
 
   constructor(scene: GameScene, name: string) {
     this.scene = scene;
@@ -40,12 +42,6 @@ export abstract class GameObject {
     return this.scene.npcs[this.name];
   }
 
-  public add() {
-    this.loadImage();
-    this.addSprite();
-    this.addAnimations();
-  }
-
   public addAnimations() {
     this.annimationNames.map(name => this.addAnimation(name));
   }
@@ -55,6 +51,17 @@ export abstract class GameObject {
     if (!assetPath) return;
     const fullPath = ['/assets', assetPath].join('/');
     scene.load.image(name, fullPath);
+  }
+
+  get props() {
+    return this.objMap[this.name];
+  }
+
+  protected setProps() {
+    const names = Object.keys(this.props);
+    names.map(name => {
+      this[name] = this.props[name];
+    });
   }
 
   protected speechOnClick(message: string) {
@@ -128,6 +135,6 @@ export abstract class GameObject {
   }
 
   get hasAnimation() {
-    return true;
+    return this.hasAnim;
   }
 }

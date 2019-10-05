@@ -7,6 +7,7 @@ import { InventoryManager } from './inventory/manager';
 import { addBackgroundImage } from '../../helpers/utils';
 import { PLAYER_MOVEMENT_AREA } from '../../constants/positions';
 import { Npc } from './scene-one/npcs/npc';
+import { Item } from './scene-one/items/item';
 
 export interface GameScene extends Phaser.Scene {
   player: Player;
@@ -39,6 +40,8 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   protected items: StrMap = {};
 
   protected npcsEnabled: string[] = [];
+  protected itemsEnabled: string[] = [];
+
   protected npcMap: StrMap = {};
   protected itemMap: StrMap = {};
 
@@ -142,7 +145,8 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   }
 
   get itemNames() {
-    return Object.keys(this.itemMap);
+    // return Object.keys(this.itemMap);
+    return this.itemsEnabled;
   }
 
   // TODO: maintain hash map (object) of all NPCs in each scene
@@ -190,7 +194,8 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   protected createItems() {
     // if (this.npcCount > 0) return;
     this.itemNames.map(key => {
-      this.items[key] = this.items[key] || new this.itemMap[key](this, key);
+      const clazz = this.itemMap[key] || Item;
+      this.items[key] = this.items[key] || new clazz(this, key);
     });
   }
 
