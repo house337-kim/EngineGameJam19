@@ -40,3 +40,37 @@ npm run deploy
 ## Development
 
 See [./Development.md]
+
+## Resources
+
+[Top Resources to learn Phaser 3](https://www.youtube.com/watch?v=zIQEvZnQELg)
+
+[Notes of Phaser 3](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/) Amazing overview
+
+### Tutorial videos:
+
+[Getting Started with Phaser 3](https://www.youtube.com/watch?v=7cpZ5Y7THmo)
+
+- Loading and adding images
+- Adding scenes and navigating between them
+- keyboard event handling
+- physics
+- ...
+
+[Phaser 3 Game Tutorial](https://www.youtube.com/watch?v=wDOym-mXxO4&list=PLitFP8FdScfHcJQ-kDmm0i6aOhinVO7ND)
+
+- Setting up environment
+- Scenes
+- Making an menu screen and loading images
+- Refactoring to typescript
+- Optimizing graphics with TexturePacker
+- Sprites animations
+- Basic physics and input
+- Custom classes
+- Tiled
+- Tile maps
+
+## Phaser 2D Editor
+
+- [Overview and Tutorial](https://www.youtube.com/watch?v=yxbmoFm0d4k)
+- [Download](https://phasereditor2d.com/blog/downloads) use Release 2.1.3 (preview)
