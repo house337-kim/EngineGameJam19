@@ -6,6 +6,7 @@ import { BaseSceneUpdater } from './base-scene-updater';
 import { InventoryManager } from './inventory/manager';
 import { addBackgroundImage } from '../../helpers/utils';
 import { PLAYER_MOVEMENT_AREA } from '../../constants/positions';
+import { Npc } from './scene-one/npcs/npc';
 
 export interface GameScene extends Phaser.Scene {
   player: Player;
@@ -37,6 +38,7 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   protected npcs: StrMap = {};
   protected items: StrMap = {};
 
+  protected npcsEnabled: string[] = [];
   protected npcMap: StrMap = {};
   protected itemMap: StrMap = {};
 
@@ -135,7 +137,8 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   }
 
   get npcNames() {
-    return Object.keys(this.npcMap);
+    // Object.keys(this.npcMap);
+    return this.npcsEnabled;
   }
 
   get itemNames() {
@@ -179,7 +182,8 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   protected createNpcs() {
     // if (this.npcCount > 0) return;
     this.npcNames.map(key => {
-      this.npcs[key] = this.npcs[key] || new this.npcMap[key](this, key);
+      const clazz = this.npcMap[key] || Npc;
+      this.npcs[key] = this.npcs[key] || new clazz(this, key);
     });
   }
 

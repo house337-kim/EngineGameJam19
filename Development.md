@@ -109,7 +109,7 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
 A scene uses this pattern:
 
 ```ts
-import { npcMap } from './npcs';
+import { npcMap, npcsEnabled } from './npcs';
 import { itemMap } from './items';
 
 export class SceneOne extends AbstractGameScene {
@@ -118,8 +118,9 @@ export class SceneOne extends AbstractGameScene {
       key: objects.scenes.scene_one
     });
 
-    this.npcMap = npcMap; // configure NPCs for the scene
-    this.itemMap = itemMap; // configure Items for the scene
+    this.npcsEnabled = npcsEnabled; // which npcs are enabled on this scene
+    this.npcMap = npcMap; // configured NPCs for the scene (optional class mappings)
+    this.itemMap = itemMap; // configure Items for the scene (similar to npcMap, ie. class mappings)
   }
 }
 ```
@@ -183,12 +184,15 @@ import { BatNpc } from './bat';
 import { GhostNpc } from './ghost';
 import { FrogNpc } from './frog';
 
+// optional mapping to Npc class with extra/custom Npc functionality
 export const npcMap = {
-  frog: FrogNpc,
-  bat: BatNpc,
-  ghost: GhostNpc,
-  skeleton: SkeletonNpc
+  // frog: FrogNpc,
+  // bat: BatNpc,
+  // ghost: GhostNpc,
+  // skeleton: SkeletonNpc
 };
+
+export const npcsEnabled = ['frog', 'bat', 'ghost', 'skeleton'];
 
 export { SkeletonNpc, BatNpc, GhostNpc, FrogNpc };
 ```
