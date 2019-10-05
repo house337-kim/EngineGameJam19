@@ -154,6 +154,25 @@ export class HeroCharacter {
 }
 ```
 
+### Characters
+
+Characters should be set up in `story/characters` as follows. Same goes for items.
+
+```ts
+export const npcs = {
+  bat: {
+    scenes: ['one'],
+    coords: { x: 160, y: 240 },
+    message: 'Bat me up!',
+    annimationNames: ['fly']
+  },
+  frog: {
+    scenes: ['one']
+    // ...
+  }
+};
+```
+
 ### NPC Characters
 
 All NPCs should be exported as a map.
@@ -212,6 +231,18 @@ export class SkeletonNpc extends Npc {
   }
 }
 ```
+
+In most cases you can reduce this even further, using the props from `story/characters/npcs` (See [Characters](#Characters) above)
+
+```ts
+export class FrogNpc extends Npc {
+  constructor(scene: GameScene, name: string) {
+    super(scene, name);
+  }
+}
+```
+
+When reduced to this, you might as well just use `new Npc(scene, name)` from the scene so that no specific class for that Npc is needed. The same pattern can be used for items.
 
 ### Items
 

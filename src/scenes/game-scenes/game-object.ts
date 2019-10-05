@@ -23,6 +23,7 @@ export abstract class GameObject {
   protected scale: number = 1;
   protected assetPath: string;
   protected message: string;
+  protected annimationNames = [];
 
   constructor(scene: GameScene, name: string) {
     this.scene = scene;
@@ -45,7 +46,9 @@ export abstract class GameObject {
     this.addAnimations();
   }
 
-  public addAnimations() {}
+  public addAnimations() {
+    this.annimationNames.map(name => this.addAnimation(name));
+  }
 
   public loadImage() {
     const { scene, assetPath, name } = this;
