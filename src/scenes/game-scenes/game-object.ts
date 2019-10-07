@@ -60,7 +60,8 @@ export abstract class GameObject {
   protected setProps() {
     const names = Object.keys(this.props);
     names.map(name => {
-      this[name] = this.props[name];
+      const value = this.props[name];
+      this[name] = value;
     });
   }
 

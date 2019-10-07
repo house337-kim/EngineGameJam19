@@ -7,7 +7,7 @@ import { InventoryManager } from './inventory/manager';
 import { addBackgroundImage } from '../../helpers/utils';
 import { PLAYER_MOVEMENT_AREA } from '../../constants/positions';
 import { Npc } from './scene-one/npcs/npc';
-import { Item } from './scene-one/items/item';
+import { Item } from './scene-one/items';
 
 export interface GameScene extends Phaser.Scene {
   player: Player;
@@ -32,8 +32,9 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   public input: Input;
   public sceneUpdater: BaseSceneUpdater;
   public inventory: InventoryManager;
-
+  public name: string;
   public checkpoint?: CheckPoint;
+
   protected _heroCharacter: HeroCharacter;
 
   protected npcs: StrMap = {};
@@ -47,8 +48,9 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
 
   protected sprites: StrMap = {};
 
-  constructor(opts = {}) {
+  constructor(opts: any = {}) {
     super(opts);
+    this.name = opts.name;
     this.inventory = new InventoryManager(this);
   }
 
@@ -72,7 +74,7 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   }
 
   public create() {
-    console.log('Scene One - Scene');
+    console.log('Scene', this.name);
 
     this.addCharacters();
     this.addItems();

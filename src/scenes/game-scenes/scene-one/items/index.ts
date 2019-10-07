@@ -7,3 +7,4 @@ export const itemMap = {
 export const itemsEnabled = ['key'];
 
 export { KeyItem };
+export { Item } from './item';
