@@ -39,7 +39,7 @@ npm run deploy
 
 ## TODO
 
-See [./TODO.md]
+See [TODO](./TODO.md)
 
 - Inventory
 - Collision detection (physics)
@@ -47,7 +47,7 @@ See [./TODO.md]
 
 ## Development
 
-See [./Development.md]
+See [Development](./Development.md)
 
 ## Resources
 
