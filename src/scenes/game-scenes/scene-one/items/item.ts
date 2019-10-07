@@ -1,14 +1,13 @@
 import { GameScene } from '../../abstract-game-scene';
 import { GameObject } from '../../game-object';
-import { WORLD_CENTER_X, WORLD_CENTER_Y } from '../../../../constants/positions';
+import { items } from '../../../../story/characters/items';
 
 export abstract class Item extends GameObject {
   constructor(scene: GameScene, name: string) {
     super(scene, name);
-  }
-
-  get hasAnimation() {
-    return false;
+    this.objMap = items;
+    this.hasAnim = false;
+    this.setProps();
   }
 
   protected createSprite() {

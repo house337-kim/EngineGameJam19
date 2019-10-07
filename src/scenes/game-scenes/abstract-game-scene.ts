@@ -7,6 +7,7 @@ import { InventoryManager } from './inventory/manager';
 import { addBackgroundImage } from '../../helpers/utils';
 import { PLAYER_MOVEMENT_AREA } from '../../constants/positions';
 import { Npc } from './scene-one/npcs/npc';
+import { Item } from './scene-one/items';
 
 export interface GameScene extends Phaser.Scene {
   player: Player;
@@ -31,21 +32,25 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   public input: Input;
   public sceneUpdater: BaseSceneUpdater;
   public inventory: InventoryManager;
-
+  public name: string;
   public checkpoint?: CheckPoint;
+
   protected _heroCharacter: HeroCharacter;
 
   protected npcs: StrMap = {};
   protected items: StrMap = {};
 
   protected npcsEnabled: string[] = [];
+  protected itemsEnabled: string[] = [];
+
   protected npcMap: StrMap = {};
   protected itemMap: StrMap = {};
 
   protected sprites: StrMap = {};
 
-  constructor(opts = {}) {
+  constructor(opts: any = {}) {
     super(opts);
+    this.name = opts.name;
     this.inventory = new InventoryManager(this);
   }
 
@@ -69,7 +74,7 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   }
 
   public create() {
-    console.log('Scene One - Scene');
+    console.log('Scene', this.name);
 
     this.addCharacters();
     this.addItems();
@@ -142,7 +147,8 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   }
 
   get itemNames() {
-    return Object.keys(this.itemMap);
+    // return Object.keys(this.itemMap);
+    return this.itemsEnabled;
   }
 
   // TODO: maintain hash map (object) of all NPCs in each scene
@@ -190,7 +196,8 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
   protected createItems() {
     // if (this.npcCount > 0) return;
     this.itemNames.map(key => {
-      this.items[key] = this.items[key] || new this.itemMap[key](this, key);
+      const clazz = this.itemMap[key] || Item;
+      this.items[key] = this.items[key] || new clazz(this, key);
     });
   }
 

@@ -37,15 +37,37 @@ npm run dev
 npm run deploy
 ```
 
+## TODO
+
+See [./TODO.md]
+
+- Inventory
+- Collision detection (physics)
+- ...
+
 ## Development
 
 See [./Development.md]
 
 ## Resources
 
-[Top Resources to learn Phaser 3](https://www.youtube.com/watch?v=zIQEvZnQELg)
+- [Top Resources to learn Phaser 3](https://www.youtube.com/watch?v=zIQEvZnQELg) (video)
+- [Phaser 3 API docs](https://photonstorm.github.io/phaser3-docs/) official API docs
+- [Notes of Phaser 3](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/) API overview with usage examples
 
-[Notes of Phaser 3](https://rexrainbow.github.io/phaser3-rex-notes/docs/site/) Amazing overview
+### Game art (assets)
+
+- [Open game art](https://opengameart.org/) with open source assets for any game
+- [Lunapic online graphics editor](https://www4.lunapic.com/editor/) for editing sprite images, such as making a specific color transparent, cropping etc.
+- [Iconfinder](https://www.iconfinder.com/)
+- [Devian art](https://www.deviantart.com/)
+- [Creative finder](http://thecreativefinder.com/)
+- [Behance - Pirates](https://www.behance.net/gallery/19504367/PIRATES)
+- [Yadi - Pirates](https://yadi.sk/a/dwfyQ0FE3WGR7o)
+- [Pinterest - Pirate games and sprites](https://www.pinterest.co.uk/sahmed3123/pirate-games-and-sprites/)
+- [Pinterest - Pirate like characters](https://www.pinterest.co.uk/pin/304767099756467653/visual-search/?cropSource=6&h=298&w=423&x=13&y=10)
+- [Pinterest - more pirates](https://www.pinterest.co.uk/pin/531776668474826062/?d=t&mt=login)
+- [Anime characters](https://www.pinterest.co.uk/pin/765400899147424256/?nic=1)
 
 ### Tutorial videos:
 

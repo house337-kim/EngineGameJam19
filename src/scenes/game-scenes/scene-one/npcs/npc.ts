@@ -7,17 +7,7 @@ export abstract class Npc extends GameObject {
     super(scene, name);
     this.size = 'small';
     this.scale = 3;
+    this.objMap = npcs;
     this.setProps();
-  }
-
-  get props() {
-    return npcs[this.name];
-  }
-
-  protected setProps() {
-    const names = Object.keys(this.props);
-    names.map(name => {
-      this[name] = this.props[name];
-    });
   }
 }
