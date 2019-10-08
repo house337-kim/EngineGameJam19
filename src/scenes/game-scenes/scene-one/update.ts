@@ -15,6 +15,7 @@ export class SceneOneUpdater extends BaseSceneUpdater {
   }
 
   public update(time: number, delta: number) {
+    this.moveHero();
     this.checkBoundingBox();
     this.handleInput();
   }
