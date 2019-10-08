@@ -278,3 +278,149 @@ export class KeyItem extends Item {
   }
 }
 ```
+
+### Adding a new item
+
+Simply add a new entry to the `items` object in `story/characters/items`
+
+```ts
+export const items = {
+  key: {
+    coords: { x: -80, y: 80 },
+    scale: 0.8,
+    message: 'Pick me up!',
+    assetPath: 'inventory/key.png'
+  }
+};
+```
+
+### Adding a new NPC
+
+Simply add a new entry to the `npcs` object in `story/characters/npcs`
+
+```ts
+export const npcs = {
+  bat: {
+    scenes: ['one'],
+    coords: { x: 160, y: 240 },
+    message: 'Bat me up!',
+    annimationNames: ['fly']
+  }
+  // ...
+};
+```
+
+The internals of each NPC or item object will be modified as we add more features to the game.
+
+Scenes should be a structure defining on what scenes the game object (ie. item or NPC) should be present.
+If the object is present on multiple scenes, we might want to have properties for each scene, such as `coords`.
+
+In the future it might look something like this, where scene specific properties can override base properties.
+
+```ts
+    scenes: {
+      one: {
+        coords: { x: 60, y: 240 },
+      },
+      two: {
+        coords: { x: -60, y: 100 },
+        messages: ['Not again!' 'Ohoy sailor!'],
+      }
+    },
+    coords: { x: 160, y: 240 },
+    message: 'Bat me up!',
+    annimationNames: ['fly']
+  }
+```
+
+To implement specific NPC or Item behavior, add a class such as `KeyItem`
+
+```ts
+export class KeyItem extends Item {
+  constructor(scene: GameScene, name: string) {
+    super(scene, name);
+  }
+}
+```
+
+Then add the class to a map, such as `itemMap` for items (in `items/index.ts`).
+Also add the map key name such `key` to the `itemsEnabled`, which controls which objects are currently enabled in the game or scene.
+
+```ts
+export const itemMap = {
+  key: KeyItem
+};
+
+export const itemsEnabled = ['key'];
+```
+
+### Curstomized Game object behavior
+
+The old way [Ghost](https://github.com/paa-kim/EngineGameJam19/blob/5aa94e072b06040b9dd1017ceadf6c1668960f02/src/scenes/game-scenes/scene-one/npcs/ghost/index.ts)
+
+```ts
+function setGhostActions(scene: GameScene, ghost: any) {
+  ghost.on('pointerup', () => {
+    // TODO: find a better way to find x and y position (setOrigin ? )
+    // Say something and move
+    createSpeechBubble(scene, ghost.x, ghost.y - 120, 250, 100, 'BOOOO!!!');
+    ghost.play('ghost_jump', true);
+  });
+}
+
+export class GhostNpc {
+  protected scene: any;
+  protected anims: Animations;
+
+  constructor(scene: GameScene) {
+    this.scene = scene;
+    this.anims = scene.anims;
+  }
+
+  set ghost(ghost: any) {
+    this.scene.ghost = ghost;
+  }
+
+  get ghost(): any {
+    return this.scene.ghost;
+  }
+
+  public addAnimations() {
+    this.ghostJumpAnimation();
+  }
+
+  public addGhost() {
+    this.ghost = new CharacterSprite(
+      this.scene,
+      WORLD_CENTER_X + 60,
+      WORLD_CENTER_Y + 100,
+      objects.sprites.small.ghost,
+      0
+    );
+    this.ghost.setInteractive();
+    setGhostActions(this.scene, this.ghost);
+  }
+
+  protected ghostJumpAnimation() {
+    // Jump animation for ghost character
+    this.anims.create({
+      key: 'ghost_jump',
+      frameRate: 10,
+      repeat: 3, // repeat forever
+      frames: this.anims.generateFrameNumbers(objects.sprites.small.ghost, {
+        start: 0,
+        end: 2
+      })
+    });
+  }
+}
+```
+
+You can achieve the same by implementing/overriding the following methods:
+
+- `loadImage()` - static image
+- `addSprite()` - sprite image
+- `addAnimations()` - using sprite added
+- `setActions()` - such as creating speech bubble on click
+
+We could generalise this to a `load` and `create` phase/methods similar to the phases/methods for scenes.
