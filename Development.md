@@ -105,6 +105,7 @@ export abstract class AbstractGameScene extends Phaser.Scene implements GameScen
 - `/hero` the `HeroCharacter` class used to adds the hero sprite and animations to the scene
 - `/items` the items to be used on this scene
 - `/npcs` the NPCs (Non-Player characters) to be used on this scene
+- `update` manages the common game loop functionality for each scene
 
 A scene uses this pattern:
 
@@ -126,6 +127,36 @@ export class SceneOne extends AbstractGameScene {
 ```
 
 Note the above will be a common pattern across most (if not all) game scenes repeated, we can further generalise and encapsulate this pattern to reduce the boilerplate needed for each scene.
+
+### Update scene (Game loop)
+
+The `SceneOneUpdater` class is used to define the game loop for scene one. `SceneOneUpdater` extends `BaseSceneUpdater` which defines common game loop functionality for all scenes, such as:
+
+- moving the hero
+- checking bounding boxes
+- handling user input
+- etc.
+
+By having a separate class for managing the game loop, we can substitute or subclass this functionality as needed making it easy to customise it for specific scenes and play around.
+
+Currently, the main function is `update`. In ``BaseSceneUpdater`the`update` has the following base functionality.
+
+```ts
+  public update(time: number, delta: number) {
+    this.moveHero();
+    this.checkBoundingBox();
+    this.handleInput();
+  }
+
+  protected moveHero() {
+    this.moveRight();
+    this.moveLeft();
+    this.moveDown();
+    this.moveUp();
+  }
+```
+
+Note that we could use a similar map/invoke mechanism to the one we use for NPCs and items to avoid having to define a game loop class for every scene, while leaving the specialization (by class) open when needed.
 
 ### Hero
 

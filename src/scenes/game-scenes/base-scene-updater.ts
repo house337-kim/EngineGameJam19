@@ -27,12 +27,16 @@ export abstract class BaseSceneUpdater implements SceneUpdater {
   }
 
   public update(time: number, delta: number) {
+    this.moveHero();
+    this.checkBoundingBox();
+    this.handleInput();
+  }
+
+  protected moveHero() {
     this.moveRight();
     this.moveLeft();
     this.moveDown();
     this.moveUp();
-    this.checkBoundingBox();
-    this.handleInput();
   }
 
   protected moveRight() {
